@@ -6,6 +6,11 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import RemindersScreen from '../screens/RemindersScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import PrescriptionsScreen from '../screens/PrescriptionsScreen';
+import SinglePrescriptionScreen from '../screens/SinglePrescriptionScreen';
+import PrescriptionSortScreen from '../screens/PrescriptionSortScreen';
+
+
 
 
 
@@ -28,10 +33,10 @@ HomeStack.navigationOptions = {
 };
 
 const RemindersStack = createStackNavigator({
-  Links: RemindersScreen,
+  Reminders: RemindersScreen,
 });
 
-RemindersScreen.navigationOptions = {
+RemindersStack.navigationOptions = {
   tabBarLabel: 'Reminders',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -55,10 +60,26 @@ SettingsStack.navigationOptions = {
   ),
 };
 
+const PrescriptionsStack = createStackNavigator({
+  Prescriptions: PrescriptionsScreen,
+  SinglePrescription: SinglePrescriptionScreen,
+});
+
+PrescriptionsStack.navigationOptions = {
+  tabBarLabel: 'Prescriptions',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options'}
+    />
+  ),
+};
+
 
 
 export default createBottomTabNavigator({
   HomeStack,
+  PrescriptionsStack,
   RemindersStack,
   SettingsStack,
 });

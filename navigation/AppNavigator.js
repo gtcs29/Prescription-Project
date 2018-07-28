@@ -14,6 +14,7 @@ import MainTabNavigator from './MainTabNavigator';
 
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
 import SignInScreen from '../screens/SignInScreen';
+import SinglePrescriptionScreen from '../screens/SinglePrescriptionScreen';
 
 
 const AuthStack = createStackNavigator({ SignIn: SignInScreen });

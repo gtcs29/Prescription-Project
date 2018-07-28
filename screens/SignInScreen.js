@@ -35,7 +35,7 @@ export default class SignInScreen extends React.Component {
               <Input />
             </Item>
           </Form>
-          <Button full warning onPress={this._signInAsync}>
+          <Button block warning onPress={this._signInAsync}>
             <Text>Sign In </Text>
           </Button>
         </Content>
