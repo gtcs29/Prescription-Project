@@ -1,0 +1,90 @@
+import React from 'react';
+import {
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  AsyncStorage
+} from 'react-native';
+import { WebBrowser } from 'expo';
+
+import { MonoText } from '../components/StyledText';
+import { Tab, Tabs, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem} from 'native-base';
+
+import Tab1 from './AllPrescriptionsScreen';
+import Tab2 from './PrescriptionSortScreen';
+import Tab3 from './PrescriptionSearchScreen';
+
+export default class PrescriptionsScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Prescriptions!',
+  };
+
+  render() {
+    return (
+
+      <Container>
+       <Tabs >
+         <Tab heading="All" >
+           <Tab1 navigation={this.props.navigation}/>
+         </Tab>
+         <Tab heading="Sort">
+           <Tab2 navigation={this.props.navigation}/>
+         </Tab>
+         <Tab heading="Search">
+           <Tab3 navigation={this.props.navigation}/>
+         </Tab>
+       </Tabs>
+     </Container>
+  //
+  //     <Container style={styles.container} contentContainerStyle={styles.contentContainer}>
+  //       <Header>
+  //         <Text>All Prescriptions</Text>
+  //       </Header>
+  //       <Content>
+
+  //       </Content>
+  //
+  //     </Container>
+  //
+  //     // <View style={styles.container}>
+  //     //
+  //     //   <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+  //     //     <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
+  //     //     <Button title="Actually, sign " onPress={this._seePrescription} />
+  //     //   </ScrollView>
+  //     // </View>
+  //   );
+  // }
+  //
+
+  //
+  // _signOutAsync = async () => {
+  //   await AsyncStorage.clear();
+  //   this.props.navigation.navigate('Auth');
+  // };
+
+)};
+_seePrescription = () => {
+  var newVar = {
+    docName: "testDoc",
+    patientName: "testPatient",
+    date: "testDate",
+  }
+  this.props.navigation.navigate('SinglePrescription', {newVar});
+};
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+
+  contentContainer: {
+    paddingTop: 30,
+  },
+
+});
