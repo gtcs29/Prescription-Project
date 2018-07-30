@@ -64,7 +64,7 @@ _renderContent(content) {
       <Container>
         <View style={styles.container}>
           <Content>
-                <ImageBackground style={{width: window.width, height: 250}} source={require('../assets/images/background.png')} >
+                <ImageBackground style={{width: window.width, height: 250}} source={require('../assets/images/purpleBackground.png')} >
                   <View>
                     <Button
                       title="View prescription 1"

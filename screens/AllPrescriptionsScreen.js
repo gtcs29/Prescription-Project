@@ -15,15 +15,15 @@ import { Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, In
 
 const dataPatient = [
   {
-    docName: "hiiiii",
-    patientName: "hellololo",
-    date: "hihello",
+    docName: "doc1",
+    patientName: "patient1",
+    date: "07/28/1987",
     medicine: "blah blah"
   },
   {
-    docName: "ploob",
-    patientName: "bllol",
-    date: "hoop",
+    docName: "doc2",
+    patientName: "patient2",
+    date: "08/13/1996",
     medicine: "wheee"
   },
   {
@@ -33,6 +33,8 @@ const dataPatient = [
 
   }
 ]
+
+var counter = 0;
 export default class AllPrescriptionsScreen extends React.Component {
   constructor(props)
   {
@@ -40,22 +42,47 @@ export default class AllPrescriptionsScreen extends React.Component {
   }
 
   renderRow(dataPatient) {
-    return (
+    counter = counter +1;
+    if (counter % 2 == 0 )
+      {return (
 
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={styles.ListViewEven}>
+          <View>
+            <Text>{dataPatient.index}</Text>
+            <Text>{dataPatient.docName}</Text>
+            <Text>{dataPatient.patientName}</Text>
+            <Text>{dataPatient.date}</Text>
+          </View>
+          <View style={{justifyContent: 'center'}}>
+            <Button block style={{backgroundColor: "#5b448c"}}
+              onPress={() => this._seePrescription(dataPatient.docName, dataPatient.patientName, dataPatient.date)}>
+              <Text>Press</Text>
+            </Button>
+          </View>
+        </View>
+
+      );
+    }
+
+    else {return (
+
+      <View style={styles.ListViewOdd}>
         <View>
           <Text>{dataPatient.docName}</Text>
           <Text>{dataPatient.patientName}</Text>
           <Text>{dataPatient.date}</Text>
         </View>
-        <View>
-          <Button block onPress={() => this._seePrescription(dataPatient.docName, dataPatient.patientName, dataPatient.date)}>
+        <View style={{justifyContent: 'center'}}>
+          <Button block style={{backgroundColor: "#5b448c"}}
+            onPress={() => this._seePrescription(dataPatient.docName, dataPatient.patientName, dataPatient.date)}>
             <Text>Press</Text>
           </Button>
         </View>
       </View>
 
     );
+
+    }
   }
 
   render() {
@@ -64,6 +91,9 @@ export default class AllPrescriptionsScreen extends React.Component {
       <Container style={styles.container} contentContainerStyle={styles.contentContainer}>
 
         <Content>
+          <Button onPress={this._addNew}>
+            <Text>Add New</Text>
+          </Button>
 
           <ListView
             data={dataPatient}
@@ -73,22 +103,12 @@ export default class AllPrescriptionsScreen extends React.Component {
 
       </Container>
 
-      // <Button block onPress={this._seePrescription}>
-      //   <Text> Press</Text>
-      // </Button>
-      // <Button block onPress={this._seePrescription}>
-      //   <Text> Press</Text>
-      // </Button>
-
-      // <View style={styles.container}>
-      //
-      //   <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      //     <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
-      //     <Button title="Actually, sign " onPress={this._seePrescription} />
-      //   </ScrollView>
-      // </View>
     );
   }
+
+  _addNew = () => {
+    this.props.navigation.navigate('AddNew');
+  };
 
   _seePrescription = (doc, patient, date) => {
     var newVar = {
@@ -107,6 +127,21 @@ export default class AllPrescriptionsScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  ListViewOdd: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: '#000000',
+    borderBottomWidth:1,
+    backgroundColor: '#ffffff'
+
+  },
+  ListViewEven: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: '#000000',
+    borderBottomWidth:1,
+    backgroundColor: '#eae0ff'
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
