@@ -9,6 +9,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 import PrescriptionsScreen from '../screens/PrescriptionsScreen';
 import SinglePrescriptionScreen from '../screens/SinglePrescriptionScreen';
 import PrescriptionSortScreen from '../screens/PrescriptionSortScreen';
+import AddNewScreen from '../screens/AddNewScreen';
+
 
 
 
@@ -63,6 +65,7 @@ SettingsStack.navigationOptions = {
 const PrescriptionsStack = createStackNavigator({
   Prescriptions: PrescriptionsScreen,
   SinglePrescription: SinglePrescriptionScreen,
+  AddNew: AddNewScreen,
 });
 
 PrescriptionsStack.navigationOptions = {

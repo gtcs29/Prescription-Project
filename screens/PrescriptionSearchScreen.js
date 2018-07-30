@@ -52,7 +52,7 @@ export default class PrescriptionSearchScreen extends React.Component {
   renderRow(dataPatient) {
     return (
 
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: '#000000', borderBottomWidth:2}}>
         <View>
           <Text>{dataPatient.docName}</Text>
           <Text>{dataPatient.patientName}</Text>
@@ -78,6 +78,7 @@ export default class PrescriptionSearchScreen extends React.Component {
             data={dataPatient}
             handleResults={this._handleResults}
             showOnLoad
+            hideBack={true}
           />
         </Header>
         <Content style={{flexDirection: 'column'}}>

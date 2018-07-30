@@ -38,33 +38,6 @@ export default class PrescriptionsScreen extends React.Component {
          </Tab>
        </Tabs>
      </Container>
-  //
-  //     <Container style={styles.container} contentContainerStyle={styles.contentContainer}>
-  //       <Header>
-  //         <Text>All Prescriptions</Text>
-  //       </Header>
-  //       <Content>
-
-  //       </Content>
-  //
-  //     </Container>
-  //
-  //     // <View style={styles.container}>
-  //     //
-  //     //   <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-  //     //     <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
-  //     //     <Button title="Actually, sign " onPress={this._seePrescription} />
-  //     //   </ScrollView>
-  //     // </View>
-  //   );
-  // }
-  //
-
-  //
-  // _signOutAsync = async () => {
-  //   await AsyncStorage.clear();
-  //   this.props.navigation.navigate('Auth');
-  // };
 
 )};
 _seePrescription = () => {
