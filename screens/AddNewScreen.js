@@ -80,24 +80,42 @@ export default class AddNewScreen extends React.Component {
     //         // ]
     //       }])
     //   });
-
       var newVar = {
+        error: false,
+        errorMsg: "",
         type: 'text',
         name: 'Doctor Name',
         required: true,
         icon: 'ios-person',
         label: 'Doctor Name',
+        value: ""
       }
-      this.setState(prevState => {
-        return {
-          selected: value,
-          fields: prevState.fields.concat(newVar)
-        };
-      });
+      var newVar2 = this.state.fields.concat(newVar)
+      this.setState({ fields: newVar2, selected: value })
+      // this.setState({selected: value,})
+      //   prevState => {
+      //   return {
+      //
+      //     fields: prevState.fields.concat(newVar)
+      //   };
+      // });
 
 
     }
 
+    check = () => {
+      if(this.state.selected !== 'key0') {
+        return (
+          <GenerateForm
+            ref={(c) => {
+              this.formGenerator = c;
+            }}
+            fields={this.state.fields}
+          />
+        )
+      }
+      return ;
+    }
 
   confirm() {
     const formValues = this.formGenerator.getValues();
@@ -129,13 +147,11 @@ export default class AddNewScreen extends React.Component {
 
             <View style={styles.wrapper}>
               <View>
-
                 <GenerateForm
                   ref={(c) => {
                     this.formGenerator = c;
                   }}
                   fields={this.state.fields}
-
                 />
               </View>
               <View style={styles.submitButton}>
@@ -144,6 +160,7 @@ export default class AddNewScreen extends React.Component {
                 </Button>
               </View>
             </View>
+            <View>{this.check()} </View>
           </Content>
         </View>
 
