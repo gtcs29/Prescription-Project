@@ -6,34 +6,88 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  AsyncStorage
+  AsyncStorage,
+  ImageBackground,
+  Dimensions
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { ListView } from '@shoutem/ui';
 import { MonoText } from '../components/StyledText';
 import { Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem} from 'native-base';
 
+const window = Dimensions.get('window');
+
 const dataPatient = [
   {
-    docName: "doc1",
-    patientName: "patient1",
-    date: "07/28/1987",
-    medicine: "blah blah"
+  "Appointment0": "Fri Aug 01 2014",
+  "Medicine0": {
+    "medicine": "Med1",
+    "medicineDosage": "2",
+    },
+  "Medicine1": {
+    "medicine": "Med3",
+    "medicineDosage": "3",
+    },
+  "amounts": {
+    "appointments": 1,
+    "diagnosis": 0,
+    "medicines": 2,
+    "testResults": 0,
+    },
+  "date": "Fri Aug 01 2014",
+  "docName": "Doctor Name",
+  "patientName": "Patient Name",
   },
   {
-    docName: "doc2",
-    patientName: "patient2",
-    date: "08/13/1996",
-    medicine: "wheee"
+  "Appointment0": "Fri Aug 01 2014",
+  "Appointment1": "Fri Aug 01 2014",
+  "Appointment2": "Fri Aug 01 2014",
+  "Medicine0": {
+    "medicine": "Med1 WHEE",
+    "medicineDosage": "2 WHEE",
+    },
+  "Medicine1": {
+    "medicine": "Med3 WHEE",
+    "medicineDosage": "3 WHEE",
+    },
+  "amounts": {
+    "appointments": 3,
+    "diagnosis": 2,
+    "medicines": 1,
+    "testResults": 1,
+    },
+  "date": "Fri Aug 01 2014",
+  "docName": "Doctor Name WHEE",
+  "Diagnosis0": "Diagnosis Test 1",
+  "Diagnosis1": "Diagnosis Test 1",
+  "testres0": "Test Result 1",
+  "patientName": "Patient Name WHEE",
   },
-  {
-    docName: "bowl",
-    patientName: "soup",
-    date: "vegetables",
-
-  }
+  // {
+  //   docName: "doc2",
+  //   patientName: "patient2",
+  //   date: "08/13/1996",
+  //   medicine: "wheee"
+  // },
+  // {
+  //   docName: "bowl",
+  //   patientName: "soup",
+  //   date: "vegetables",
+  //
+  // },
+  // {
+  //   docName: "John Doe",
+  //   patientName: "Gitika Bose",
+  //   date: "07/28/1987",
+  //   medicine: "blah blah"
+  // },
+  // {
+  //   docName: "John Doe",
+  //   patientName: "Gitika Bose",
+  //   date: "07/28/1987",
+  //   medicine: "blah blah"
+  // }
 ]
-
 var counter = 0;
 export default class AllPrescriptionsScreen extends React.Component {
   constructor(props)
@@ -43,23 +97,56 @@ export default class AllPrescriptionsScreen extends React.Component {
 
   renderRow(dataPatient) {
     counter = counter +1;
+    var newVar = {
+      medicines: [],
+      appointments: {},
+      diagnosis: {},
+      testres: {}
+    }
+    var i;
+
+    for (i=0; i < dataPatient.amounts["medicines"]; i++) {
+      var med = "Medicine"+i;
+      newVar.medicines.push(dataPatient[med])
+    }
+    var i;
+
+    for (i=0; i < dataPatient.amounts.appointments; i++) {
+      var app = "Appointment"+i;
+      newVar.appointments[app] = (dataPatient[app])
+    }
+    var i;
+
+    for (i=0; i < dataPatient.amounts.diagnosis; i++) {
+      var dia = "Diagnosis"+i;
+      newVar.diagnosis[dia] = (dataPatient[dia])
+    }
+    var i;
+
+    for (i=0; i < dataPatient.amounts.testResults; i++) {
+      var tr = "testres"+i;
+      newVar.testres[tr] = (dataPatient[tr])
+    }
+
     if (counter % 2 == 0 )
       {return (
+        <ImageBackground style={{width: window.width, height: 100}} source={require('../assets/images/purpleBackground.png')} >
 
         <View style={styles.ListViewEven}>
+
           <View>
-            <Text>{dataPatient.index}</Text>
-            <Text>{dataPatient.docName}</Text>
+            <Text style={{fontWeight: "bold"}}>{dataPatient.docName}</Text>
             <Text>{dataPatient.patientName}</Text>
             <Text>{dataPatient.date}</Text>
           </View>
           <View style={{justifyContent: 'center'}}>
-            <Button block style={{backgroundColor: "#5b448c"}}
-              onPress={() => this._seePrescription(dataPatient.docName, dataPatient.patientName, dataPatient.date)}>
+            <Button block style={{backgroundColor: "#c1514d"}}
+              onPress={() => this._seePrescription(dataPatient.docName, dataPatient.patientName, dataPatient.date, newVar.medicines, newVar.appointments, newVar.diagnosis, newVar.testres)}>
               <Text>Press</Text>
             </Button>
           </View>
         </View>
+        </ImageBackground>
 
       );
     }
@@ -68,13 +155,13 @@ export default class AllPrescriptionsScreen extends React.Component {
 
       <View style={styles.ListViewOdd}>
         <View>
-          <Text>{dataPatient.docName}</Text>
+          <Text style={{fontWeight: "bold"}}>{dataPatient.docName}</Text>
           <Text>{dataPatient.patientName}</Text>
           <Text>{dataPatient.date}</Text>
         </View>
         <View style={{justifyContent: 'center'}}>
-          <Button block style={{backgroundColor: "#5b448c"}}
-            onPress={() => this._seePrescription(dataPatient.docName, dataPatient.patientName, dataPatient.date)}>
+          <Button block style={{backgroundColor: "#c1514d"}}
+            onPress={() => this._seePrescription(dataPatient.docName, dataPatient.patientName, dataPatient.date, newVar.medicines, newVar.appointments, newVar.diagnosis, newVar.testres)}>
             <Text>Press</Text>
           </Button>
         </View>
@@ -88,34 +175,44 @@ export default class AllPrescriptionsScreen extends React.Component {
   render() {
     return (
 
-      <Container style={styles.container} contentContainerStyle={styles.contentContainer}>
+        <Container style={styles.container} contentContainerStyle={styles.contentContainer}>
 
-        <Content>
-          <Button onPress={this._addNew}>
-            <Text>Add New</Text>
-          </Button>
+          <Content>
+            <View style={{paddingVertical: 20}}>
+            //d0716b - middle
+            <Button block style={{backgroundColor: "#c1514d"}} onPress={this._addNew}>
+              <Text>Add New</Text>
+            </Button>
+            </View>
 
-          <ListView
-            data={dataPatient}
-            renderRow={this.renderRow.bind(this)}
-          />
-        </Content>
+            <ListView
+              data={dataPatient}
+              renderRow={this.renderRow.bind(this)}
+            />
+          </Content>
 
-      </Container>
+        </Container>
+
 
     );
   }
 
   _addNew = () => {
-    this.props.navigation.navigate('AddNew');
+    this.props.navigation.navigate('betweenAdd');
   };
 
-  _seePrescription = (doc, patient, date) => {
+  _seePrescription = (doc, patient, date, medicines, appointments, diagnosis, testres) => {
     var newVar = {
       docName: doc,
       patientName: patient,
-      date: date
+      date: date,
+      medicines: medicines,
+      appointments: appointments,
+      diagnosis: diagnosis,
+      testres: testres
     }
+
+
     this.props.navigation.navigate('SinglePrescription', {newVar});
   };
 
@@ -131,16 +228,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomColor: '#000000',
-    borderBottomWidth:1,
-    backgroundColor: '#ffffff'
-
+    borderBottomWidth:0,
+    backgroundColor: '#fbf5f3',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   ListViewEven: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomColor: '#000000',
-    borderBottomWidth:1,
-    backgroundColor: '#eae0ff'
+    borderBottomWidth:0,
+    // backgroundColor: '#edb0a2',
+    paddingHorizontal: 20,
+    paddingVertical: 20
   },
   container: {
     flex: 1,

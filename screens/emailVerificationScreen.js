@@ -15,7 +15,7 @@ import { Container, Button, Text, Content, Form, Item, Label, Input, Header, Bod
 const window = Dimensions.get('window');
 
 
-export default class SignInScreen extends React.Component {
+export default class emailVerificationScreen extends React.Component {
   static navigationOptions = {
     title: null,
   };
@@ -31,33 +31,29 @@ export default class SignInScreen extends React.Component {
         <Image style={{width: window.width, height: 150}} source={require('../assets/images/logoTeal.png')} />
 
 
-          <Form style={{paddingHorizontal: 20, paddingVertical:20}}>
+
+          <Form style={{paddingHorizontal: 20, paddingBottom: 20}}>
             <Item stackedLabel>
-              <Label>Username</Label>
-              <Input />
-            </Item>
-            <Item stackedLabel last>
-              <Label>Password</Label>
+              <Label>Email</Label>
               <Input />
             </Item>
           </Form>
 
-          <Button style={{backgroundColor: '#4b8477', marginHorizontal: 20, marginVertical: 10}} block onPress={this._signInAsync} >
-            <Text>Sign In </Text>
-          </Button>
+          <ActivityIndicator size="large" color="#9abdb5" style={{paddingBottom: 20}} />
 
-
-          <Button style={{backgroundColor: '#9abdb5', marginHorizontal: 20, marginVertical: 10}} block onPress={this._signUp} >
-            <Text>Sign Up </Text>
-          </Button>
 
           <View style={{paddingBottom: 10}}>
 
-          <Button transparent full onPress={this._signInAsync} >
-            <Text style={{color: '#4b8477'}}>Forgot Password</Text>
+          <Button transparent full >
+            <Text style={{color: '#4b8477'}}>Resend Email</Text>
           </Button>
 
           </View>
+
+
+          <Button style={{backgroundColor: '#9abdb5', paddingHorizontal: 20}} block onPress={this._signIn} >
+            <Text>Sign In </Text>
+          </Button>
 
         </Content>
 
@@ -70,8 +66,8 @@ export default class SignInScreen extends React.Component {
     );
   }
 
-  _signUp = () => {
-    this.props.navigation.navigate('SignUp');
+  _signIn = () => {
+    this.props.navigation.navigate('SignIn');
   }
 
   _signInAsync = async () => {

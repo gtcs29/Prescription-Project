@@ -14,84 +14,138 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
-import { Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem} from 'native-base';
+import { ListItem, Icon, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, List} from 'native-base';
 
-const dataArray = [
-  { title: "First Element", content: "Lorem ipsum dolor sit amet" },
-  { title: "Second Element", content: "Lorem ipsum dolor sit amet" },
-  { title: "Third Element", content: "Lorem ipsum dolor sit amet" }
-];
 
 const window = Dimensions.get('window');
-
 export default class SinglePrescriptionScreen extends React.Component {
   static navigationOptions = {
     title: 'Prescription',
   };
 
-  _renderHeader(title, expanded) {
-  return (
-    <View
-      style={{ flexDirection: "row", padding: 10, justifyContent: "space-between", alignItems: "center", backgroundColor: "#A9DAD6" }}
-    >
-      <Text style={{ fontWeight: "600" }}>
-        {" "}{title}
-      </Text>
-      {expanded
-        ? <Icon style={{ fontSize: 18 }} name="remove-circle" />
-        : <Icon style={{ fontSize: 18 }} name="add-circle" />}
-    </View>
-  );
-}
-_renderContent(content) {
-  return (
-    <Text
-      style={{ backgroundColor: "#e3f1f1", padding: 10, fontStyle: "italic" }}
-    >
-      {content}
-    </Text>
-  );
-}
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataArray: [
+      ],
+      appointments: [
+
+      ],
+      diagnosis: [
+
+      ],
+      tests: [
+
+      ]
+    }
+
+
+      for(var i = 0; i < this.props.navigation.state.params.newVar.medicines.length; i++) {
+        var newVar = {
+          title: this.props.navigation.state.params.newVar.medicines[i].medicine,
+          content: this.props.navigation.state.params.newVar.medicines[i].medicineDosage
+        }
+        this.state.dataArray.push(newVar);
+      }
+      for(var i = 0; i < Object.keys(this.props.navigation.state.params.newVar.appointments).length; i++) {
+        var val = "Appointment" + i;
+
+        this.state.appointments.push(this.props.navigation.state.params.newVar.appointments[val]);
+      }
+      for(var i = 0; i < Object.keys(this.props.navigation.state.params.newVar.diagnosis).length; i++) {
+        var val = "Diagnosis" + i;
+
+        this.state.diagnosis.push(this.props.navigation.state.params.newVar.diagnosis[val]);
+      }
+      for(var i = 0; i < Object.keys(this.props.navigation.state.params.newVar.testres).length; i++) {
+        var val = "testres" + i;
+
+        this.state.tests.push(this.props.navigation.state.params.newVar.testres[val]);
+      }
+
+
+
+
+  }
+
+
 
 
   render() {
+
     return (
-      // <View style={styles.container}>
-      //   <Button title="Show me more of the app" onPress={this._showMoreApp} />
-      //   <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
-      // </View>
+
+
 
       <Container>
         <View style={styles.container}>
+          <Header style={styles.dateText}>
+            <Text >{this.props.navigation.state.params.newVar.date}</Text>
+
+          </Header>
           <Content>
-                <ImageBackground style={{width: window.width, height: 250}} source={require('../assets/images/purpleBackground.png')} >
-                  <View>
-                    <Button
-                      title="View prescription 1"
-                      onPress={this._showPrescriptions}
-                    />
-                    <Text style={styles.mainText}>Doctor: {this.props.navigation.state.params.newVar.docName}</Text>
-                    <Text style={styles.mainText}>Patient: {this.props.navigation.state.params.newVar.patientName}</Text>
-                    <Text style={styles.mainText}>Date: {this.props.navigation.state.params.newVar.date}</Text>
+                <ImageBackground style={{width: window.width, height: 100}} source={require('../assets/images/purpleBackground.png')} >
+                  <View style={{justifyContent: 'space-between', flexDirection: 'column', paddingVertical: 20, paddingHorizontal: 20, height: 100}}>
+                    <Text>Doctor: {this.props.navigation.state.params.newVar.docName}</Text>
+                    <Text>Patient: {this.props.navigation.state.params.newVar.patientName}</Text>
                   </View>
                 </ImageBackground>
-              <Header>
+              <Header style={{paddingHorizontal: 20}}>
                 <Text style={styles.mainText}>Medicines</Text>
               </Header>
 
-              <Accordion dataArray={dataArray} icon="add" expandedIcon="remove"
-
+              <Accordion dataArray={this.state.dataArray} icon="add" expandedIcon="remove"
+                style={{paddingHorizontal: 20}}
+                headerStyle={{ backgroundColor: "#d0716b"}}
+                contentStyle={{ backgroundColor: "#fbf5f3" }}
               />
 
-
-              <Header>
-                <Text style={styles.mainText}>Medicines</Text>
+              <Header style={{paddingHorizontal: 20}}>
+                <Text style={styles.mainText}>Diagnosis</Text>
               </Header>
 
-              <Accordion dataArray={dataArray} icon="add" expandedIcon="remove"
-              headerStyle={{ backgroundColor: "#c6badd" }}
-              contentStyle={{ backgroundColor: "#eae0ff" }}
-              />
+              <List dataArray={this.state.diagnosis}
+                renderRow={(item) =>
+                  <ListItem>
+                    <Text>{item}</Text>
+                  </ListItem>
+                }>
+              </List>
+
+              <Header style={{paddingHorizontal: 20}}>
+                <Text style={styles.mainText}>Appointments</Text>
+              </Header>
+
+              <List dataArray={this.state.appointments}
+                renderRow={(item) =>
+                  <ImageBackground style={{width: window.width, height: 48}} source={require('../assets/images/purpleBackground.png')} >
+
+                  <ListItem>
+
+                    <Text>{item}</Text>
+                  </ListItem>
+                  </ImageBackground>
+
+                }>
+              </List>
+
+
+
+
+
+              <Header style={{paddingHorizontal: 20}}>
+
+                  <Text style={styles.mainText}>Test Results</Text>
+
+              </Header>
+
+              <List dataArray={this.state.tests}
+                renderRow={(item) =>
+                  <ListItem>
+                    <Text>{item}</Text>
+                  </ListItem>
+                }>
+              </List>
 
 
 
@@ -100,50 +154,9 @@ _renderContent(content) {
 
       </Container>
 
-
-      // <View style={styles.container}>
-      //   <Container>
-      //     <Content>
-      //       <ImageBackground style={{width: window.width, height: 250}} source={require('../assets/images/background.png')} >
-      //         <View>
-      //           <Button
-      //             title="View prescription 1"
-      //             onPress={this._showPrescriptions}
-      //           />
-      //           <Text style={styles.mainText}>Doctor: {this.props.docName}</Text>
-      //           <Text style={styles.mainText}>Patient: {this.props.patientName}</Text>
-      //           <Text style={styles.mainText}>Date: {this.props.date}</Text>
-      //         </View>
-      //       </ImageBackground>
-      //     </Content>
-      //   </Container>
-      //
-      //   <Container>
-      //     <Header>
-      //       <Text style={styles.mainText}>Medicines</Text>
-      //     </Header>
-      //     <Content padder>
-      //       <Accordion dataArray={dataArray} icon="add" expandedIcon="remove" />
-      //     </Content>
-      //   </Container>
-      //
-      //   <Container>
-      //     <Header>
-      //       <Text style={styles.mainText}>Medicines</Text>
-      //     </Header>
-      //     <Content padder>
-      //       <Accordion dataArray={dataArray} icon="add" expandedIcon="remove" />
-      //       renderHeader={this._renderHeader}
-      //       renderContent={this._renderContent}
-      //     </Content>
-      //   </Container>
-      //
-      // </View>
     );
   }
-  _showPrescriptions = () => {
-    this.props.navigation.navigate('Prescriptions');
-  };
+
 
   _showMoreApp = () => {
     this.props.navigation.navigate('Other');
@@ -162,11 +175,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  dateText: {
+    flexDirection: "column",
+    alignItems:"flex-end"
+  },
   mainText: {
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontFamily: 'Avenir',
-    fontSize: 40,
+    fontWeight: 'bold',
   }
 });
