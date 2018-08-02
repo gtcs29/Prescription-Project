@@ -20,6 +20,16 @@ export default class SignUpScreen extends React.Component {
     title: null,
   };
 
+  state = {
+    firstName: "",
+    lastName: "",
+    username: "",
+    password: "",
+    email: "",
+    verifyPassword: ""
+
+  }
+
   render() {
     return (
 
@@ -32,25 +42,29 @@ export default class SignUpScreen extends React.Component {
 
 
           <Form style={{paddingHorizontal: 20}}>
-            <Item stackedLabel>
+            <Item stackedLabel >
               <Label>First Name</Label>
-              <Input />
+              <Input onChangeText={firstName => this.setState({ firstName })}/>
             </Item>
             <Item stackedLabel>
               <Label>Last Name</Label>
-              <Input />
+              <Input onChangeText={lastName => this.setState({ lastName })}/>
             </Item>
             <Item stackedLabel>
               <Label>Username</Label>
-              <Input />
+              <Input onChangeText={username => this.setState({ username })}/>
             </Item>
-            <Item stackedLabel last>
+            <Item stackedLabel >
               <Label>Password</Label>
-              <Input />
+              <Input onChangeText={password => this.setState({ password })} />
+            </Item>
+            <Item stackedLabel >
+              <Label>Verify Password</Label>
+              <Input onChangeText={verifyPassword => this.setState({ verifyPassword })} />
             </Item>
             <Item stackedLabel>
               <Label>Email</Label>
-              <Input />
+              <Input onChangeText={email => this.setState({ email })}/>
             </Item>
           </Form>
 
@@ -72,6 +86,7 @@ export default class SignUpScreen extends React.Component {
   }
 
   _verify = () => {
+
     this.props.navigation.navigate('emailVerification');
   }
 

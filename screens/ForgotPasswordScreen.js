@@ -15,7 +15,7 @@ import { Container, Button, Text, Content, Form, Item, Label, Input, Header, Bod
 const window = Dimensions.get('window');
 
 
-export default class emailVerificationScreen extends React.Component {
+export default class ForgotPasswordScreen extends React.Component {
   static navigationOptions = {
     title: null,
   };
@@ -34,29 +34,19 @@ export default class emailVerificationScreen extends React.Component {
         <Image style={{width: window.width, height: 150}} source={require('../assets/images/logoTeal.png')} />
 
 
-
-          <Form style={{paddingHorizontal: 20, paddingBottom: 20}}>
+          <Form style={{paddingHorizontal: 20, paddingVertical:20}}>
             <Item stackedLabel>
               <Label>Email</Label>
               <Input onChangeText={email => this.setState({ email })}/>
             </Item>
+
           </Form>
 
-          <ActivityIndicator size="large" color="#9abdb5" style={{paddingBottom: 20}} />
 
-
-          <View style={{paddingBottom: 10}}>
-
-          <Button transparent full >
-            <Text style={{color: '#4b8477'}}>Resend Email</Text>
+          <Button style={{backgroundColor: '#4b8477', marginHorizontal: 20, marginVertical: 10}} block onPress={this._signUp} >
+            <Text>Send Password </Text>
           </Button>
 
-          </View>
-
-
-          <Button style={{backgroundColor: '#9abdb5', paddingHorizontal: 20}} block onPress={this._signIn} >
-            <Text>Sign In </Text>
-          </Button>
 
         </Content>
 
@@ -69,8 +59,8 @@ export default class emailVerificationScreen extends React.Component {
     );
   }
 
-  _signIn = () => {
-    this.props.navigation.navigate('SignIn');
+  _signUp = () => {
+    this.props.navigation.navigate('SignUp');
   }
 
   _signInAsync = async () => {

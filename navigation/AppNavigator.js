@@ -16,9 +16,11 @@ import AuthLoadingScreen from '../screens/AuthLoadingScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import emailVerificationScreen from '../screens/emailVerificationScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 
 
-const AuthStack = createStackNavigator({ SignIn: SignInScreen, SignUp: SignUpScreen, emailVerification: emailVerificationScreen });
+const AuthStack = createStackNavigator({ SignIn: SignInScreen, SignUp: SignUpScreen,
+  emailVerification: emailVerificationScreen, ForgotPassword: ForgotPasswordScreen  });
 
 export default createSwitchNavigator(
   {
