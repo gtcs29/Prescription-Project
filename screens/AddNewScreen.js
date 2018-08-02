@@ -1,177 +1,169 @@
 import React from 'react';
 import {
-  Dimensions,
   Image,
   Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
-  AsyncStorage,
-  ImageBackground
+  AsyncStorage
 } from 'react-native';
 import { WebBrowser } from 'expo';
+import { ListView } from '@shoutem/ui';
+import { MonoText } from '../components/StyledText';
+import { Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, Picker} from 'native-base';
+
 import GenerateForm from 'react-native-form-builder';
 
-import { MonoText } from '../components/StyledText';
-import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
-import { Picker, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem} from 'native-base';
-
-const window = Dimensions.get('window');
 
 export default class AddNewScreen extends React.Component {
   static navigationOptions = {
-    title: 'Prescription',
-
+    title: 'Prescriptions!',
   };
 
-
-  state = {
-      fields: [
-        {
-          type: 'text',
-          name: 'Doctor Name',
-          required: true,
-          icon: 'ios-person',
-          label: 'Doctor Name',
-        },
-        {
-          type: 'text',
-          name: 'Patient Name',
-          icon: 'ios-lock',
-          required: true,
-          label: 'Patient Name',
-        },
-        {
-          type: 'date',
-          name: 'date',
-          mode: 'date',
-          label: 'Select Date',
-          maxDate: new Date(2018, 7, 15),
-          minDate: new Date(1990, 7, 15),
-        },
-      ],
-      selected: 'key0'
-    }
-    // this.state = {
-    //   selected: "key1"
-    // };
-
-
-  onValueChange = (value: string) => {
-    // this.setState({
-    //   selected: value
-    // })
-    //   fields: this.state.fields.concat([{
-    //         type: 'text',
-    //         name: 'Medicine',
-    //         label: 'Doctor Name',
-    //         // fields: [
-    //         //   {
-    //         //     type: 'text',
-    //         //     name: 'medicine',
-    //         //     label: 'Medicine',
-    //         //   },
-    //         //   {
-    //         //     type: 'text',
-    //         //     name: 'medicine dosage',
-    //         //     label: 'Dosage',
-    //         //   },
-    //         // ]
-    //       }])
-    //   });
-      var newVar = {
-        error: false,
-        errorMsg: "",
+  constructor(props) {
+    super(props);
+    this.confirm = this.confirm.bind(this);
+    var i = 0;
+    var tempFields = [
+      {
         type: 'text',
-        name: 'Doctor Name',
+        name: 'docName',
         required: true,
         icon: 'ios-person',
         label: 'Doctor Name',
-        value: ""
-      }
-      var newVar2 = this.state.fields.concat(newVar)
-      this.setState({ fields: newVar2, selected: value })
-      // this.setState({selected: value,})
-      //   prevState => {
-      //   return {
-      //
-      //     fields: prevState.fields.concat(newVar)
-      //   };
-      // });
+      },
+      {
+        type: 'text',
+        name: 'patientName',
+        icon: 'ios-lock',
+        required: true,
+        label: 'Patient Name',
+      },
+      {
+        type: 'date',
+        name: 'date',
+        mode: 'date',
+        label: 'Select Date',
+        maxDate: new Date(2018, 7, 15),
+        minDate: new Date(1990, 7, 15),
+      },
+    ]
+    while(i < this.props.navigation.state.params.newVar.meds) {
+      tempFields.push(
+        {
+          type: 'group',
+          name: 'Medicine' + i,
+          label: 'Medicine',
+          fields: [
+            {
+              type: 'text',
+              name: 'medicine',
+              label: 'Add Medicine',
+            },
+            {
+              type: 'text',
+              name: 'medicineDosage',
+              label: 'Add Dosage',
+            },
+          ]
+        });
+      i++;
+    }
+    var i = 0;
 
-
+    while(i < this.props.navigation.state.params.newVar.appointments) {
+      tempFields.push({
+        type: 'date',
+        name: 'Appointment'+ i,
+        mode: 'date',
+        label: 'Appointment',
+        maxDate: new Date(2018, 7, 15),
+        minDate: new Date(1990, 7, 15),
+      });
+      i++;
+    }
+    var i = 0;
+    while(i < this.props.navigation.state.params.newVar.diagnosis) {
+      tempFields.push({
+        type: 'text',
+        name: 'Diagnosis'+ i,
+        required: true,
+        icon: 'ios-person',
+        label: 'Diagnosis',
+      });
+      i++;
     }
 
-    check = () => {
-      if(this.state.selected !== 'key0') {
-        return (
-          <GenerateForm
-            ref={(c) => {
-              this.formGenerator = c;
-            }}
-            fields={this.state.fields}
-          />
-        )
-      }
-      return ;
+    var i = 0;
+
+    while(i < this.props.navigation.state.params.newVar.testres) {
+      tempFields.push({
+        type: 'text',
+        name: 'testres'+ i,
+        required: true,
+        icon: 'ios-person',
+        label: 'Test Results',
+      });
+      i++;
     }
+
+
+    this.state = {fields: tempFields}
+
+  }
 
   confirm() {
     const formValues = this.formGenerator.getValues();
+    formValues["date"] = formValues["date"].toString();
+    formValues['date'].split(" ")[0]+formValues['date'].split(" ")[1]+formValues['date'].split(" ")[2]+formValues['date'].split(" ")[3];
+
+    formValues["amounts"] = {
+      "medicines": this.props.navigation.state.params.newVar.meds,
+      "appointments": this.props.navigation.state.params.newVar.appointments,
+      "diagnosis": this.props.navigation.state.params.newVar.diagnosis,
+      "testResults": this.props.navigation.state.params.newVar.testres
+    }
+    var i;
+    for(i=0; i < this.props.navigation.state.params.newVar.appointments; i++) {
+      formValues['Appointment'+i] = formValues['Appointment'+i].toString();
+      formValues['Appointment'+i].split(" ")[0]+formValues['Appointment'+i].split(" ")[1]+formValues['Appointment'+i].split(" ")[2]+formValues['Appointment'+i].split(" ")[3];
+    }
+
+    console.log(formValues);
+    return(formValues);
   }
 
   render() {
-    console.log(this.state.fields);
 
     return (
 
-      <Container>
-        <View style={styles.container}>
-          <Content>
-          <Form>
-            <Picker
-              note
-              mode="dropdown"
-              style={{ width: 120 }}
-              selectedValue={this.state.selected}
-              onValueChange={this.onValueChange.bind(this)}
-            >
-              <Picker.Item label="--Select--" value="key0" />
-              <Picker.Item label="Medicine" value="key1" />
-              <Picker.Item label="Diagnosis" value="key2" />
-              <Picker.Item label="Appointments" value="key3" />
-              <Picker.Item label="Test Results" value="key4" />
-            </Picker>
-          </Form>
+      <Container style={styles.container} contentContainerStyle={styles.contentContainer}>
 
-            <View style={styles.wrapper}>
-              <View>
-                <GenerateForm
-                  ref={(c) => {
-                    this.formGenerator = c;
-                  }}
-                  fields={this.state.fields}
-                />
-              </View>
-              <View style={styles.submitButton}>
-                <Button block onPress={() => this.confirm()}>
-                  <Text>Start</Text>
-                </Button>
-              </View>
-            </View>
-            <View>{this.check()} </View>
-          </Content>
-        </View>
+        <Content>
+
+          <View>
+            <GenerateForm
+              ref={(c) => {
+                this.formGenerator = c;
+              }}
+              fields={this.state.fields}
+            />
+          </View>
+
+          <View style={styles.submitButton}>
+            <Button block onPress={() => this.confirm()}>
+              <Text>Confirm</Text>
+            </Button>
+          </View>
+
+        </Content>
 
       </Container>
 
     );
   }
 
-  _showMoreApp = () => {
-    this.props.navigation.navigate('Other');
-  };
 
   _signOutAsync = async () => {
     await AsyncStorage.clear();
@@ -181,24 +173,32 @@ export default class AddNewScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  ListViewOdd: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: '#000000',
+    borderBottomWidth:1,
+    backgroundColor: '#ffffff'
 
+  },
+  ListViewEven: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: '#000000',
+    borderBottomWidth:1,
+    backgroundColor: '#eae0ff'
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  mainText: {
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontFamily: 'Avenir',
-    fontSize: 40,
+
+  contentContainer: {
+    paddingTop: 30,
   },
-  wrapper: {
-    flex: 1,
-    marginTop: 150,
-  },
-  submitButton: {
-    paddingHorizontal: 10,
-    paddingTop: 20,
-  },
+    submitButton: {
+      paddingHorizontal: 10,
+      paddingTop: 20,
+    },
+
 });
