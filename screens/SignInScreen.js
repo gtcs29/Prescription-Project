@@ -20,6 +20,11 @@ export default class SignInScreen extends React.Component {
     title: null,
   };
 
+  state = {
+    username: "",
+    password: ""
+  }
+
   render() {
     return (
 
@@ -34,11 +39,11 @@ export default class SignInScreen extends React.Component {
           <Form style={{paddingHorizontal: 20, paddingVertical:20}}>
             <Item stackedLabel>
               <Label>Username</Label>
-              <Input />
+              <Input onChangeText={username => this.setState({ username })}/>
             </Item>
             <Item stackedLabel last>
               <Label>Password</Label>
-              <Input />
+              <Input onChangeText={password => this.setState({ password })}/>
             </Item>
           </Form>
 
@@ -53,7 +58,7 @@ export default class SignInScreen extends React.Component {
 
           <View style={{paddingBottom: 10}}>
 
-          <Button transparent full onPress={this._signInAsync} >
+          <Button transparent full onPress={this._forgotPassword} >
             <Text style={{color: '#4b8477'}}>Forgot Password</Text>
           </Button>
 
@@ -68,6 +73,10 @@ export default class SignInScreen extends React.Component {
 
 
     );
+  }
+
+  _forgotPassword = () => {
+    this.props.navigation.navigate('ForgotPassword');
   }
 
   _signUp = () => {
