@@ -20,7 +20,7 @@ module.exports = function(req, res) {
       };
       sgMail.send(msg)
         .then(() => {
-          admin.database().ref('users/' + uid + '/verify_email/')
+          admin.database().ref('users/' + uid + '/auth/verify_email/')
             .update({ code: code, codeValid: true }, () => {
               res.send({ success: true });
             });

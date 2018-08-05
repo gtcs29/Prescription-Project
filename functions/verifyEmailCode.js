@@ -6,7 +6,7 @@ module.exports = function(req, res) {
 
   admin.auth().getUserByEmail(req.body.email)
     .then(userRecord => {
-      const ref = admin.database().ref('users/' + userRecord.uid + '/verify_email/');
+      const ref = admin.database().ref('users/' + userRecord.uid + '/auth/verify_email/');
       ref.on('value', snapshot => {
         ref.off();
         const user = snapshot.val();
