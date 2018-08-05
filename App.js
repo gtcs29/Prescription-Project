@@ -1,4 +1,5 @@
 import React from 'react';
+import firebase from 'firebase';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
@@ -6,7 +7,15 @@ import { createStackNavigator } from 'react-navigation';
 import PrescriptionsScreen from './screens/PrescriptionsScreen';
 import SinglePrescriptionScreen from './screens/SinglePrescriptionScreen';
 
-
+var config = {
+  apiKey: "AIzaSyBRU1khtjv7uP_-ClbqZhU0jQ8p3kMpQxU",
+  authDomain: "prescriptions-gtcs29.firebaseapp.com",
+  databaseURL: "https://prescriptions-gtcs29.firebaseio.com",
+  projectId: "prescriptions-gtcs29",
+  storageBucket: "prescriptions-gtcs29.appspot.com",
+  messagingSenderId: "595069032401"
+};
+firebase.initializeApp(config);
 
 export default class App extends React.Component {
 

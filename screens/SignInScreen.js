@@ -13,7 +13,7 @@ import {
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import { Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title} from 'native-base';
 const window = Dimensions.get('window');
-
+import firebase from 'firebase';
 
 export default class SignInScreen extends React.Component {
   static navigationOptions = {
@@ -21,29 +21,26 @@ export default class SignInScreen extends React.Component {
   };
 
   state = {
-    username: "",
+    email: "",
     password: ""
   }
 
   render() {
     return (
 
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-
-      <Container style={{justifyContent: 'space-evenly'}}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
 
         <Content style={{paddingTop: 50}}>
         <Image style={{width: window.width, height: 150}} source={require('../assets/images/logoTeal.png')} />
 
-
-          <Form style={{paddingHorizontal: 20, paddingVertical:20}}>
+          <Form style={{paddingTop:0, paddingHorizontal: 10, paddingVertical:20}}>
             <Item stackedLabel>
-              <Label>Username</Label>
-              <Input onChangeText={username => this.setState({ username })}/>
+              <Label>Email</Label>
+              <Input autoCapitalize={'none'} autoCorrect={false} onChangeText={email => this.setState({ email })}/>
             </Item>
             <Item stackedLabel last>
               <Label>Password</Label>
-              <Input onChangeText={password => this.setState({ password })}/>
+              <Input secureTextEntry={true} autoCapitalize={'none'} autoCorrect={false} onChangeText={password => this.setState({ password })}/>
             </Item>
           </Form>
 
@@ -57,18 +54,13 @@ export default class SignInScreen extends React.Component {
           </Button>
 
           <View style={{paddingBottom: 10}}>
-
-          <Button transparent full onPress={this._forgotPassword} >
-            <Text style={{color: '#4b8477'}}>Forgot Password</Text>
-          </Button>
-
+            <Button transparent full onPress={this._forgotPassword} >
+              <Text style={{color: '#4b8477'}}>Forgot Password</Text>
+            </Button>
           </View>
 
         </Content>
-
-      <View style={{ height: 60 }} />
-      </Container>
-
+        <View style={{ height: 10 }} />
       </KeyboardAvoidingView>
 
 
@@ -84,8 +76,22 @@ export default class SignInScreen extends React.Component {
   }
 
   _signInAsync = async () => {
-    await AsyncStorage.setItem('userToken', 'abc');
-    this.props.navigation.navigate('Main');
+    var that = this;
+    console.log(this.state.error)
+    const { email, password } = this.state;
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(() => {
+        if(firebase.auth().currentUser.emailVerified){
+          return that.props.navigation.navigate('Main');
+        }
+        that.setState({ error: 'Please verify your email before logging in.'})
+      })
+      .catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        that.setState({ error: errorMessage })
+      });
+
   };
 }
 
