@@ -87,10 +87,12 @@ export default class SignInScreen extends React.Component {
 
         var userId = firebase.auth().currentUser.uid;
         var ref = firebase.database().ref("users/" + userId+ "/auth/reset_password");
+
         ref.on('value', function(snapshot) {
           ref.off();
+          console.log(snapshot.val().passwordReset);
           if(snapshot.val().passwordReset){
-            return that.props.navigation.navigate('Mail');//change this to password Reset screen.
+            return that.props.navigation.navigate('PasswordReset');//change this to password Reset screen.
           }
         })
 

@@ -17,9 +17,10 @@ import axios from 'axios';
 
 import firebase from 'firebase';
 
+
 const ROOT_URL = 'https://us-central1-prescriptions-gtcs29.cloudfunctions.net'
 
-export default class PasswordResetScreen extends React.Component {
+export default class PasswordResetProfileScreen extends React.Component {
   static navigationOptions = {
     title: null,
   };
@@ -73,9 +74,6 @@ export default class PasswordResetScreen extends React.Component {
     var hasNumber = /\d/;
     var hasSpecialCharacters = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/);
 
-    if(user.password !== oldPassword) {
-      return this.setState({error:'Please enter correct old password.', oldPassword: '', password: '', verifyPassword: ''})
-    }
     if(password !== verifyPassword ){
       return this.setState({ error: 'Passwords do not match.', password: '', verifyPassword: ''})
     }
@@ -93,9 +91,6 @@ export default class PasswordResetScreen extends React.Component {
     user.updateProfile({
       password: password
     }).then(function() {
-      firebase.database().ref("users/" + userId+ "/auth/reset_password")
-      .update({ passwordReset: false })
-
       this.props.navigation.navigate('Main')
     }).catch(function(error) {
       this.setState({error: error.toString()})

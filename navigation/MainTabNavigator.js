@@ -14,8 +14,7 @@ import betweenAddScreen from '../screens/betweenAddScreen';
 import ProfileLoginFormScreen from '../screens/ProfileLoginFormScreen';
 import ProfileMedicalFormScreen from '../screens/ProfileMedicalFormScreen';
 import ProfilePersonalFormScreen from '../screens/ProfilePersonalFormScreen';
-import PasswordResetScreen from '../screens/PasswordResetScreen'
-
+import PasswordResetProfileScreen from '../screens/PasswordResetProfileScreen';
 
 
 
@@ -58,7 +57,7 @@ const SettingsStack = createStackNavigator({
   ProfileLoginForm: ProfileLoginFormScreen,
   ProfileMedicalForm: ProfileMedicalFormScreen,
   ProfilePersonalForm: ProfilePersonalFormScreen,
-  PasswordReset: PasswordResetScreen
+  PasswordResetProfile: PasswordResetProfileScreen
 
 });
 

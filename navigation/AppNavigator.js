@@ -17,14 +17,18 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import emailVerificationScreen from '../screens/emailVerificationScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import PasswordResetScreen from '../screens/PasswordResetScreen';
 
 
 const AuthStack = createStackNavigator({ SignIn: SignInScreen, SignUp: SignUpScreen,
   emailVerification: emailVerificationScreen, ForgotPassword: ForgotPasswordScreen  });
 
+const PasswordResetStack = createStackNavigator({PasswordReset: PasswordResetScreen})
+
 export default createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
+    PasswordReset: PasswordResetStack,
     // App: AppStack,
     Main: MainTabNavigator,
     Auth: AuthStack,
