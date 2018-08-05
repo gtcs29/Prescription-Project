@@ -1,8 +1,8 @@
 {
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
-  "expoServerPort": null,
+  "expoServerNgrokUrl": "https://ib-gyj.tejitpabari.prescription-project.exp.direct",
+  "packagerNgrokUrl": "https://packager.ib-gyj.tejitpabari.prescription-project.exp.direct",
+  "ngrokPid": 16084,
+  "expoServerPort": 19000,
   "packagerPort": null,
   "packagerPid": null,
   "devToolsPort": 19002

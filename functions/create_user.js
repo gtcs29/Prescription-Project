@@ -9,6 +9,11 @@ module.exports = function(req, res) {
     displayName: req.body.username,
     disabled: false
   })
-  .then(user => res.send(user))
+  .then(userRecord => {
+    admin.database().ref('users/' + userRecord.uid + '/auth/reset_password/')
+      .update({ passwordReset: false }, () => {
+        res.send({ success: true });
+      });
+  })
   .catch(err => res.status(422).send({ error: err }));
 }
