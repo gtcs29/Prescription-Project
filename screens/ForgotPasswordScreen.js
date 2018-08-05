@@ -12,7 +12,11 @@ import {
 } from 'react-native';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import { Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title} from 'native-base';
+import firebase from 'firebase';
+import axios from 'axios';
+
 const window = Dimensions.get('window');
+const ROOT_URL = 'https://us-central1-prescriptions-gtcs29.cloudfunctions.net'
 
 
 export default class ForgotPasswordScreen extends React.Component {
@@ -21,8 +25,10 @@ export default class ForgotPasswordScreen extends React.Component {
   };
 
   state = {
-    email: ""
+    email: "",
+    success: ""
   }
+
   render() {
     return (
 
@@ -43,8 +49,8 @@ export default class ForgotPasswordScreen extends React.Component {
           </Form>
 
 
-          <Button style={{backgroundColor: '#4b8477', marginHorizontal: 20, marginVertical: 10}} block onPress={this._signUp} >
-            <Text>Send Password </Text>
+          <Button style={{backgroundColor: '#4b8477', marginHorizontal: 20, marginVertical: 10}} block onPress={this._resetPassword} >
+            <Text>Reset Password </Text>
           </Button>
 
 
@@ -59,13 +65,18 @@ export default class ForgotPasswordScreen extends React.Component {
     );
   }
 
-  _signUp = () => {
-    this.props.navigation.navigate('SignUp');
-  }
-
-  _signInAsync = async () => {
-    await AsyncStorage.setItem('userToken', 'abc');
-    this.props.navigation.navigate('Main');
+  _resetPassword = async () => {
+    var that = this;
+    console.log(that.state.success);
+    try{
+      await axios.post(`${ROOT_URL}/resetPasswordEmail`, {
+        email: that.state.email
+      })
+      that.setState({ success: "A Password reset email has been sent to you. PLease login with that new password."})
+    }
+    catch (err) {
+      return console.log(err);
+    }
   };
 }
 
@@ -73,6 +84,5 @@ const styles = StyleSheet.create({
   container: {
     height: 60,
     flex: 1,
-
   },
 });

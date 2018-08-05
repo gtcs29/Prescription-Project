@@ -1,9 +1,9 @@
 {
-  "expoServerNgrokUrl": "https://ib-gyj.gitika.prescription-project.exp.direct",
-  "packagerNgrokUrl": "https://packager.ib-gyj.gitika.prescription-project.exp.direct",
-  "ngrokPid": 70399,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 70385,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
   "devToolsPort": 19002
 }
