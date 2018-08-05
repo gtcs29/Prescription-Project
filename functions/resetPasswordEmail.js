@@ -21,7 +21,10 @@ module.exports = function(req, res) {
           };
           sgMail.send(msg)
             .then(() => {
-              return res.send({ success: true });
+              admin.database().ref('users/' + uid + '/auth/reset_password/')
+                .update({ passwordReset: true }, () => {
+                  res.send({ success: true });
+                });
             })
             .catch((err) => {
               return res.status(422).send({ error: err });

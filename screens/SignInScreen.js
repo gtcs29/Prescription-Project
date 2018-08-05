@@ -81,17 +81,24 @@ export default class SignInScreen extends React.Component {
     const { email, password } = this.state;
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(() => {
-        if(firebase.auth().currentUser.emailVerified){
-          return that.props.navigation.navigate('Main');
+        if(!firebase.auth().currentUser.emailVerified){
+          return that.setState({ error: 'Please verify your email before logging in.'})
         }
-        that.setState({ error: 'Please verify your email before logging in.'})
+
+        var userId = firebase.auth().currentUser.uid;
+        var ref = firebase.database().ref("users/" + userId+ "/auth/reset_password");
+        ref.on('value', function(snapshot) {
+          ref.off();
+          if(snapshot.val().passwordReset){
+            return that.props.navigation.navigate('Mail');//change this to password Reset screen.
+          }
+        })
+
+        that.props.navigation.navigate('Main');
       })
       .catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        that.setState({ error: errorMessage })
+        that.setState({ error: error.message })
       });
-
   };
 }
 
