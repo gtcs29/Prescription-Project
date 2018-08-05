@@ -8,8 +8,10 @@ import {
   View,
   AsyncStorage
 } from 'react-native';
-// import { WebBrowser } from 'expo';
-// import { MonoText } from '../components/StyledText';
+import { WebBrowser } from 'expo';
+
+import { MonoText } from '../components/StyledText';
+
 import { Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem} from 'native-base';
 
 export default class HomeScreen extends React.Component {
@@ -37,14 +39,9 @@ export default class HomeScreen extends React.Component {
 
 
   _signOutAsync = async () => {
-    try {
-      await firebase.auth().signOut();
-      this.props.navigation.navigate('Auth');
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
+    await AsyncStorage.clear();
+    this.props.navigation.navigate('Auth');
+  };
 
 }
 
