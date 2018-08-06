@@ -69,10 +69,11 @@ export default class ForgotPasswordScreen extends React.Component {
     var that = this;
     console.log(that.state.success);
     try{
-      await axios.post(`${ROOT_URL}/resetPasswordEmail`, {
+      await axios.post(`${ROOT_URL}/resetPassword`, {
         email: that.state.email
       })
-      that.setState({ success: "A Password reset email has been sent to you. PLease login with that new password."})
+      var success = "A Password reset email has been sent to you. PLease login with that new password."
+      that.props.navigation.navigate("SignIn", {success});
     }
     catch (err) {
       return console.log(err);
