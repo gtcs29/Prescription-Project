@@ -8,7 +8,8 @@ import {
   View,
   AsyncStorage,
   ImageBackground,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { ListView } from '@shoutem/ui';
@@ -17,6 +18,7 @@ import { Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, In
 import firebase from 'firebase';
 const window = Dimensions.get('window');
 
+var dataPatient = [];
 // const dataPatient = [
 //   {
 //   "Appointment0": "Fri Aug 01 2014",
@@ -98,24 +100,6 @@ export default class AllPrescriptionsScreen extends React.Component {
       this.state={
         loaded: false
       }
-  }
-
-  readDataFirebase = () => {
-    var userId = firebase.auth().currentUser.uid;
-    var that = this;
-    var tempArray = [];
-    console.log(userId);
-    firebase.database().ref("users/" + userId+ "/data/Prescriptions/").on('value', function(snapshot) {
-      snapshot.forEach(function(childSnapshot) {
-        var childData = childSnapshot.val();
-        that.setState(prevState => {
-          return {
-            dataPatient: prevState.dataPatient.concat(childSnapshot)
-          };
-        });
-      });
-    });
-    console.log(that.state.dataPatient.amounts);
   }
 
   renderRow(dataPatient) {
