@@ -17,9 +17,10 @@ import axios from 'axios';
 
 import firebase from 'firebase';
 
+
 const ROOT_URL = 'https://us-central1-prescriptions-gtcs29.cloudfunctions.net'
 
-export default class PasswordResetScreen extends React.Component {
+export default class PasswordResetProfileScreen extends React.Component {
   static navigationOptions = {
     title: null,
   };
@@ -68,11 +69,11 @@ export default class PasswordResetScreen extends React.Component {
   _verify = async () => {
     console.log(this.state.error)
     var user = firebase.auth().currentUser;
-    var userId = user.uid;
 
     const {oldPassword, verifyPassword, password} = this.state
     var hasNumber = /\d/;
     var hasSpecialCharacters = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/);
+
     if(password !== verifyPassword ){
       return this.setState({ error: 'Passwords do not match.', password: '', verifyPassword: ''})
     }
@@ -85,33 +86,15 @@ export default class PasswordResetScreen extends React.Component {
     if(hasSpecialCharacters.test(password) ){
       return this.setState({ error: 'Password can only contain @ or _ as a special character.', password: '', verifyPassword: ''})
     }
-    var that = this;
 
-    user.reauthenticateAndRetrieveDataWithCredential(firebase.auth.EmailAuthProvider.credential(user.email, oldPassword))
-      .then(() => {
-        console.log('bb')
-        user.updatePassword(password)
-          .then(function() {
-            console.log()
-            firebase.database().ref("users/" + userId+ "/auth/reset_password")
-              .update({ passwordReset: false })
-            axios.post(`${ROOT_URL}/resetPasswordEmail`, {
-              uid: userId
-            })
-              .then(() => {
-                that.props.navigation.navigate('Main')
-              })
-              .catch(err => {
-                return that.setState({error: error.toString(), password: '', verifyPassword: '' })
-              })
-          })
-          .catch(function(error) {
-            return that.setState({error: error.toString(), password: '', verifyPassword: '' })
-          });
-      })
-      .catch(function(error) {
-        that.setState({ error: error.toString(), oldPassword: '', password: '', verifyPassword: '' })
-      });
+
+    user.updateProfile({
+      password: password
+    }).then(function() {
+      this.props.navigation.navigate('Main')
+    }).catch(function(error) {
+      this.setState({error: error.toString()})
+    });
   }
 
 }
