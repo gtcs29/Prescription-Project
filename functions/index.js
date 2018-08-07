@@ -4,7 +4,6 @@ const serviceAccount = require('./serviceAccount.json');
 require('dotenv').load();
 
 const verifyEmail = require('./verifyEmail');
-const createUser = require('./create_user');
 const verifyEmailCode = require('./verifyEmailCode');
 const resetPassword = require('./resetPassword');
 const resetPasswordEmail = require('./resetPasswordEmail');
@@ -16,7 +15,6 @@ admin.initializeApp({
   databaseURL: "https://prescriptions-gtcs29.firebaseio.com"
 });
 
-exports.createUser = functions.https.onRequest(createUser);
 exports.verifyEmail = functions.https.onRequest(verifyEmail);
 exports.verifyEmailCode = functions.https.onRequest(verifyEmailCode);
 exports.resetPassword = functions.https.onRequest(resetPassword);
