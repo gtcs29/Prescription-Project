@@ -204,7 +204,6 @@ export default class AllPrescriptionsScreen extends React.Component {
 
   render() {
      if (!this.state.loaded) return <ActivityIndicator size="large" color="#9abdb5" style={{paddingBottom: 20}} />;
-     console.log(dataPatient);
      return (
 
          <Container style={styles.container} contentContainerStyle={styles.contentContainer}>

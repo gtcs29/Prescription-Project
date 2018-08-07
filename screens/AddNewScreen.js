@@ -45,6 +45,7 @@ export default class AddNewScreen extends React.Component {
         name: 'date',
         mode: 'date',
         label: 'Select Date',
+        required: true,
         maxDate: new Date(2018, 7, 15),
         minDate: new Date(1990, 7, 15),
       },
@@ -115,6 +116,7 @@ export default class AddNewScreen extends React.Component {
 
   confirm() {
     const formValues = this.formGenerator.getValues();
+    console.log(formValues);
     formValues["date"] = formValues["date"].toString();
     formValues['date'].split(" ")[0]+formValues['date'].split(" ")[1]+formValues['date'].split(" ")[2]+formValues['date'].split(" ")[3];
 
@@ -130,7 +132,6 @@ export default class AddNewScreen extends React.Component {
       formValues['Appointment'+i].split(" ")[0]+formValues['Appointment'+i].split(" ")[1]+formValues['Appointment'+i].split(" ")[2]+formValues['Appointment'+i].split(" ")[3];
     }
 
-    console.log(formValues);
     return(formValues);
   }
 
