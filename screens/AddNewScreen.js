@@ -12,6 +12,7 @@ import { WebBrowser } from 'expo';
 import { ListView } from '@shoutem/ui';
 import { MonoText } from '../components/StyledText';
 import { Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, Picker} from 'native-base';
+import firebase from 'firebase';
 
 import GenerateForm from 'react-native-form-builder';
 
@@ -44,9 +45,10 @@ export default class AddNewScreen extends React.Component {
         type: 'date',
         name: 'date',
         mode: 'date',
+        required: true,
         label: 'Select Date',
-        maxDate: new Date(2018, 7, 15),
-        minDate: new Date(1990, 7, 15),
+        maxDate: new Date(2300, 7, 15),
+        minDate: new Date(1880, 7, 15),
       },
     ]
     while(i < this.props.navigation.state.params.newVar.meds) {
@@ -78,8 +80,8 @@ export default class AddNewScreen extends React.Component {
         name: 'Appointment'+ i,
         mode: 'date',
         label: 'Appointment',
-        maxDate: new Date(2018, 7, 15),
-        minDate: new Date(1990, 7, 15),
+        maxDate: new Date(2300, 7, 15),
+        minDate: new Date(1880, 7, 15),
       });
       i++;
     }
@@ -116,7 +118,7 @@ export default class AddNewScreen extends React.Component {
   confirm() {
     const formValues = this.formGenerator.getValues();
     formValues["date"] = formValues["date"].toString();
-    formValues['date'].split(" ")[0]+formValues['date'].split(" ")[1]+formValues['date'].split(" ")[2]+formValues['date'].split(" ")[3];
+    formValues['date'] = formValues['date'].split(" ")[0]+ " " + formValues['date'].split(" ")[1]+" " +formValues['date'].split(" ")[2]+" " +formValues['date'].split(" ")[3];
 
     formValues["amounts"] = {
       "medicines": this.props.navigation.state.params.newVar.meds,
@@ -127,11 +129,12 @@ export default class AddNewScreen extends React.Component {
     var i;
     for(i=0; i < this.props.navigation.state.params.newVar.appointments; i++) {
       formValues['Appointment'+i] = formValues['Appointment'+i].toString();
-      formValues['Appointment'+i].split(" ")[0]+formValues['Appointment'+i].split(" ")[1]+formValues['Appointment'+i].split(" ")[2]+formValues['Appointment'+i].split(" ")[3];
+      formValues['Appointment'+i] = formValues['Appointment'+i].split(" ")[0]+" " +formValues['Appointment'+i].split(" ")[1]+" " +formValues['Appointment'+i].split(" ")[2]+" " +formValues['Appointment'+i].split(" ")[3];
     }
-
     console.log(formValues);
-    return(formValues);
+    var userId = firebase.auth().currentUser.uid;
+    var that = this;
+    firebase.database().ref("users/" + userId+ "/data/Prescriptions/").push(formValues)
   }
 
   render() {
