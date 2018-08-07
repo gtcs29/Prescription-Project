@@ -98,7 +98,8 @@ export default class AllPrescriptionsScreen extends React.Component {
   {
       super(props);
       this.state={
-        loaded: false
+        loaded: false,
+        dataPatient2: []
       }
   }
 
@@ -182,43 +183,37 @@ export default class AllPrescriptionsScreen extends React.Component {
   componentWillMount() {
     var userId = firebase.auth().currentUser.uid;
     var that = this;
-    var tempArray = [];
     console.log(userId);
     firebase.database().ref("users/" + userId+ "/data/Prescriptions/").on('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
-        console.log(childSnapshot)
-        var childData = childSnapshot.val();
-        console.log(childData);
 
-        dataPatient.push(childData);
+        var childData = childSnapshot.val();
+        // dataPatient.push(childData);
         that.setState({loaded: true});
-        // tempArray.concat(childData);
-        // that.setState(prevState => {
-        //   return {
-        //     dataPatient: prevState.dataPatient.concat(childData)
-        //   };
-        // });
+        that.setState(prevState => {
+          return {
+            dataPatient2: prevState.dataPatient2.concat(childData)
+          };
+        });
       });
     });
   }
 
   render() {
      if (!this.state.loaded) return <ActivityIndicator size="large" color="#9abdb5" style={{paddingBottom: 20}} />;
-     console.log(dataPatient);
      return (
 
          <Container style={styles.container} contentContainerStyle={styles.contentContainer}>
 
            <Content>
              <View style={{paddingVertical: 20}}>
-             //d0716b - middle
              <Button block style={{backgroundColor: "#c1514d"}} onPress={this._addNew}>
                <Text>Add New</Text>
              </Button>
              </View>
 
              <ListView
-               data={dataPatient}
+               data={this.state.dataPatient2}
                renderRow={this.renderRow.bind(this)}
              />
            </Content>

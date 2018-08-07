@@ -23,10 +23,10 @@ export default class betweenAddScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected1: undefined,
-      selected2: undefined,
-      selected3: undefined,
-      selected4: undefined
+      selected1: "key0",
+      selected2: "key0",
+      selected3: "key0",
+      selected4: "key0"
     };
     this.onValueChange1 = this.onValueChange1.bind(this);
     this.onValueChange2 = this.onValueChange2.bind(this);
@@ -162,13 +162,15 @@ export default class betweenAddScreen extends React.Component {
   }
 
   addNewNav = () => {
+
     var newVar = {
       meds: parseInt(this.state.selected1.substring(3)),
       appointments: parseInt(this.state.selected2.substring(3)),
       diagnosis: parseInt(this.state.selected3.substring(3)),
       testres: parseInt(this.state.selected4.substring(3))
     }
-    this.props.navigation.navigate('AddNew', {newVar});
+
+    this.props.navigation.navigate('AddNew', {newVar} );
   }
 
 

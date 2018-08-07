@@ -8,12 +8,14 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   ImageBackground,
-  Image
+  Image,
+  Keyboard
 } from 'react-native';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
-import { Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title} from 'native-base';
+import { Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Toast} from 'native-base';
 const window = Dimensions.get('window');
 import axios from 'axios';
+import firebase from 'firebase';
 
 const ROOT_URL = 'https://us-central1-prescriptions-gtcs29.cloudfunctions.net'
 
@@ -43,19 +45,19 @@ export default class SignUpScreen extends React.Component {
           <Form style={{paddingVertical:20}}>
             <Item stackedLabel>
               <Label>Username</Label>
-              <Input autoCapitalize={'none'} autoCorrect={false} onChangeText={username => this.setState({ username })}/>
+              <Input defaultValue={this.state.username} autoCapitalize={'none'} autoCorrect={false} onChangeText={username => this.setState({ username })}/>
             </Item>
             <Item stackedLabel>
               <Label>Email</Label>
-              <Input autoCapitalize={'none'} autoCorrect={false} onChangeText={email => this.setState({ email })}/>
+              <Input defaultValue={this.state.email} autoCapitalize={'none'} autoCorrect={false} onChangeText={email => this.setState({ email })}/>
             </Item>
             <Item stackedLabel >
               <Label>Password</Label>
-              <Input autoCapitalize={'none'} autoCorrect={false} secureTextEntry={true} onChangeText={password => this.setState({ password })} />
+              <Input defaultValue={this.state.password} autoCapitalize={'none'} autoCorrect={false} secureTextEntry={true} onChangeText={password => this.setState({ password })} />
             </Item>
             <Item stackedLabel >
               <Label>Verify Password</Label>
-              <Input autoCapitalize={'none'} autoCorrect={false} secureTextEntry={true} onChangeText={verifyPassword => this.setState({ verifyPassword })} />
+              <Input defaultValue={this.state.verifyPassword} autoCapitalize={'none'} autoCorrect={false} secureTextEntry={true} onChangeText={verifyPassword => this.setState({ verifyPassword })} />
             </Item>
             <View style={{ height: 10 }} />
           </Form>
@@ -71,37 +73,88 @@ export default class SignUpScreen extends React.Component {
   }
 
   _verify = async () => {
-    console.log(this.state.error)
+    Keyboard.dismiss();
     const {email, password, verifyPassword, username} = this.state
     var hasNumber = /\d/;
     var hasSpecialCharacters = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/);
 
     if(!email.includes("@")){
-      return this.setState({ error: 'Email is badly formatted.', email: '', password: '', verifyPassword: ''})
+      this.setState({ error: 'Email is badly formatted.', email: '', password: '', verifyPassword: ''})
+      return           (
+        Toast.show({
+            text: 'Fix Email Format',
+            buttonText: "Okay",
+            buttonTextStyle: { color: "#008000" },
+            buttonStyle: { backgroundColor: "#5cb85c" }
+          })
+        )
     }
     if(password !== verifyPassword ){
-      return this.setState({ error: 'Passwords do not match.', password: '', verifyPassword: ''})
+      this.setState({ error: 'Passwords do not match.', password: '', verifyPassword: ''})
+      return           (
+        Toast.show({
+            text: 'Passwords don\'t match',
+            buttonText: "Okay",
+            buttonTextStyle: { color: "#008000" },
+            buttonStyle: { backgroundColor: "#5cb85c" }
+          })
+        )
     }
     if(password.length < 8 ){
-      return this.setState({ error: 'Password must be more than 8 characters.', password: '', verifyPassword: ''})
+      this.setState({ error: 'Password must be more than 8 characters.', password: '', verifyPassword: ''})
+      return           (
+        Toast.show({
+            text: 'Password Too Short',
+            buttonText: "Okay",
+            buttonTextStyle: { color: "#008000" },
+            buttonStyle: { backgroundColor: "#5cb85c" }
+          })
+        )
     }
     if(!hasNumber.test(password) ){
-      return this.setState({ error: 'Password must contain a number.', password: '', verifyPassword: ''})
+      this.setState({ error: 'Password must contain a number.', password: '', verifyPassword: ''})
+      return           (
+        Toast.show({
+            text: this.state.error,
+            buttonText: "Okay",
+            buttonTextStyle: { color: "#008000" },
+            buttonStyle: { backgroundColor: "#5cb85c" }
+          })
+        )
     }
     if(hasSpecialCharacters.test(password) ){
-      return this.setState({ error: 'Password can only contain @ or _ as a special character.', password: '', verifyPassword: ''})
+      this.setState({ error: 'Password can only contain @ or _ as a special character.', password: '', verifyPassword: ''})
+      return           (
+        Toast.show({
+            text: 'Invalid Characters',
+            buttonText: "Okay",
+            buttonTextStyle: { color: "#008000" },
+            buttonStyle: { backgroundColor: "#5cb85c" }
+          })
+        )
     }
-    try{
-      await axios.post(`${ROOT_URL}/createUser`, {
-        email: email,
-        password: password,
-        username: username
-      })
-      await axios.post(`${ROOT_URL}/verifyEmail`, { email: email })
-      this.props.navigation.navigate('emailVerification', {email});
-    }
+    try {
+        await firebase.auth().createUserWithEmailAndPassword(email, password)
+        var user = firebase.auth().currentUser;
+        var ref = firebase.database().ref("users/" + user.userId+ "/auth/reset_password");
+        user.updateProfile({ displayName: username })
+        ref.set({ passwordReset: false })
+        await axios.post(`${ROOT_URL}/verifyEmail`, { email: email })
+        this.props.navigation.navigate('emailVerification', {email});
+      }
     catch (err) {
-      return this.setState({ error: err})
+      console.log(err);
+      console.log(err.code)
+      switch(err.code) {
+        case 'auth/email-already-in-use':
+          Toast.show({
+              text: 'Email is already in use',
+              buttonText: "Okay",
+              buttonTextStyle: { color: "#008000" },
+              buttonStyle: { backgroundColor: "#5cb85c" }
+            })
+      }
+
     }
   }
 

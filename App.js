@@ -6,7 +6,7 @@ import AppNavigator from './navigation/AppNavigator';
 import { createStackNavigator } from 'react-navigation';
 import PrescriptionsScreen from './screens/PrescriptionsScreen';
 import SinglePrescriptionScreen from './screens/SinglePrescriptionScreen';
-
+import { Root } from 'native-base';
 var config = {
   apiKey: "AIzaSyBRU1khtjv7uP_-ClbqZhU0jQ8p3kMpQxU",
   authDomain: "prescriptions-gtcs29.firebaseapp.com",
@@ -36,7 +36,9 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          <Root>
+            <AppNavigator />
+          </Root>
         </View>
       );
     }

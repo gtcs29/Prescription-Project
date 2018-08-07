@@ -8,10 +8,11 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   ImageBackground,
-  Image
+  Image,
+  Keyboard
 } from 'react-native';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
-import { Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title} from 'native-base';
+import { Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Toast} from 'native-base';
 const window = Dimensions.get('window');
 import firebase from 'firebase';
 
@@ -76,8 +77,8 @@ export default class SignInScreen extends React.Component {
   }
 
   _signInAsync = async () => {
+    Keyboard.dismiss();
     var that = this;
-    console.log(this.state.error)
     const { email, password } = this.state;
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(() => {
@@ -99,7 +100,24 @@ export default class SignInScreen extends React.Component {
         that.props.navigation.navigate('Main');
       })
       .catch(function(error) {
-        that.setState({ error: error.message })
+        switch(error.code) {
+          case 'auth/user-not-found':
+            Toast.show({
+                text: 'User Not Found',
+                buttonText: "Okay",
+                buttonTextStyle: { color: "#008000" },
+                buttonStyle: { backgroundColor: "#5cb85c" }
+              })
+          case 'auth/invalid-email':
+            Toast.show({
+                text: 'Invalid Email',
+                buttonText: "Okay",
+                buttonTextStyle: { color: "#008000" },
+                buttonStyle: { backgroundColor: "#5cb85c" }
+              })
+        }
+
+
       });
   };
 }
