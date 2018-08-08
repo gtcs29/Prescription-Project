@@ -19,27 +19,18 @@ import GenerateForm from 'react-native-form-builder';
 const tempFields = [
   {
     type: 'text',
-    name: 'docName',
+    name: 'name',
     required: true,
     icon: 'ios-person',
-    label: 'Doctor Name',
+    label: 'Medicine Name',
   },
   {
     type: 'text',
-    name: 'patientName',
+    name: 'dosage',
     icon: 'ios-lock',
     required: true,
-    label: 'Patient Name',
-  },
-  {
-    type: 'date',
-    name: 'date',
-    mode: 'date',
-    required: true,
-    label: 'Select Date',
-    maxDate: new Date(2300, 7, 15),
-    minDate: new Date(1880, 7, 15),
-  },
+    label: 'Medicine Dosage',
+  }
 ]
 
 const form = {
@@ -51,39 +42,39 @@ export default class MedicineFormScreen extends React.Component {
   static navigationOptions = {
     title: 'Prescriptions!',
   };
-
-  componentWillMount = async() => {
-    console.log(this.props.navigation.state.params.newVar.id);
-    try {
-       form = await AsyncStorage.getItem(this.props.navigation.state.params.newVar.id.toString());
-       form = JSON.parse(form);
-     } catch (error) {
-       console.log(error);
-     }
-  }
+  //
+  // componentWillMount = async() => {
+  //   console.log(this.props.navigation.state.params.newVar.id);
+  //   try {
+  //      form = await AsyncStorage.getItem(this.props.navigation.state.params.newVar.id.toString());
+  //      form = JSON.parse(form);
+  //    } catch (error) {
+  //      console.log(error);
+  //    }
+  // }
 
   constructor(props) {
     super(props);
     var i = 0;
-
-
-    this.state = {fields: tempFields, selected1: 'ADD', doc: "", patientName: "", date: null}
-
-
+    this.state = {fields: tempFields, selected1: 'ADD'}
 
   }
 
   confirm = async() => {
     const formValues = this.formGenerator.getValues();
     console.log(formValues)
-    try {
-      if (formValues !== null)
-      {
-        await AsyncStorage.setItem(this.props.navigation.state.params.newVar.id.toString(), JSON.stringify(formValues));
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   if (formValues !== null)
+    //   {
+    //     await AsyncStorage.setItem(this.props.navigation.state.params.newVar.id.toString(), JSON.stringify(formValues));
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
+    // ADD METHOD HERE THAT UPDATES FIREBASE PRESCRIPTION THINGY WITH NEW DATA ALSO LIKE IDK MAYBE NOW AN ID
+    // IS NEEDED BC IF YOU CLICK SAVE AFTER AN EDIT YOU MIGHT NOT ADD BUT RATHER CHANGE AN EXISTING ENTRY
+    // WOULD BE COOL IF YOU DID THAT BC WE WILL NEED IT LATER ANYWAY 
 
     this.props.navigation.navigate('AddNew')
   }
@@ -105,7 +96,12 @@ export default class MedicineFormScreen extends React.Component {
                 this.formGenerator = c;
               }}
               fields={this.state.fields}
-              formData = { form }
+              formData = {
+                {
+                  name: this.props.navigation.state.params.newVar.medName,
+                  dosage: this.props.navigation.state.params.newVar.medDosage
+                }
+              }
             />
           </View>
 

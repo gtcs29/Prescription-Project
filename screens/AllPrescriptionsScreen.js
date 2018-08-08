@@ -155,7 +155,7 @@ export default class AllPrescriptionsScreen extends React.Component {
    }
 
   _addNew = () => {
-    this.props.navigation.navigate('betweenAdd');
+    this.props.navigation.navigate('AddNew');
   };
 
   _seePrescription = (doc, patient, date, medicines, appointments, diagnosis, testres) => {
