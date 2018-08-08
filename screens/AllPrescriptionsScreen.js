@@ -19,77 +19,7 @@ import firebase from 'firebase';
 const window = Dimensions.get('window');
 
 var dataPatient = [];
-// const dataPatient = [
-//   {
-//   "Appointment0": "Fri Aug 01 2014",
-//   "Medicine0": {
-//     "medicine": "Med1",
-//     "medicineDosage": "2",
-//     },
-//   "Medicine1": {
-//     "medicine": "Med3",
-//     "medicineDosage": "3",
-//     },
-//   "amounts": {
-//     "appointments": 1,
-//     "diagnosis": 0,
-//     "medicines": 2,
-//     "testResults": 0,
-//     },
-//   "date": "Fri Aug 01 2014",
-//   "docName": "Doctor Name",
-//   "patientName": "Patient Name",
-//   },
-//   {
-//   "Appointment0": "Fri Aug 01 2014",
-//   "Appointment1": "Fri Aug 01 2014",
-//   "Appointment2": "Fri Aug 01 2014",
-//   "Medicine0": {
-//     "medicine": "Med1 WHEE",
-//     "medicineDosage": "2 WHEE",
-//     },
-//   "Medicine1": {
-//     "medicine": "Med3 WHEE",
-//     "medicineDosage": "3 WHEE",
-//     },
-//   "amounts": {
-//     "appointments": 3,
-//     "diagnosis": 2,
-//     "medicines": 1,
-//     "testResults": 1,
-//     },
-//   "date": "Fri Aug 01 2014",
-//   "docName": "Doctor Name WHEE",
-//   "Diagnosis0": "Diagnosis Test 1",
-//   "Diagnosis1": "Diagnosis Test 1",
-//   "testres0": "Test Result 1",
-//   "patientName": "Patient Name WHEE",
-//   },
-//   // {
-//   //   docName: "doc2",
-//   //   patientName: "patient2",
-//   //   date: "08/13/1996",
-//   //   medicine: "wheee"
-//   // },
-//   // {
-//   //   docName: "bowl",
-//   //   patientName: "soup",
-//   //   date: "vegetables",
-//   //
-//   // },
-//   // {
-//   //   docName: "John Doe",
-//   //   patientName: "Gitika Bose",
-//   //   date: "07/28/1987",
-//   //   medicine: "blah blah"
-//   // },
-//   // {
-//   //   docName: "John Doe",
-//   //   patientName: "Gitika Bose",
-//   //   date: "07/28/1987",
-//   //   medicine: "blah blah"
-//   // }
-// ]
+
 
 
 var counter = 0;
@@ -98,7 +28,8 @@ export default class AllPrescriptionsScreen extends React.Component {
   {
       super(props);
       this.state={
-        loaded: false
+        loaded: false,
+        dataPatient2: []
       }
   }
 
@@ -182,22 +113,18 @@ export default class AllPrescriptionsScreen extends React.Component {
   componentWillMount() {
     var userId = firebase.auth().currentUser.uid;
     var that = this;
-    var tempArray = [];
     console.log(userId);
     firebase.database().ref("users/" + userId+ "/data/Prescriptions/").on('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
-        console.log(childSnapshot)
-        var childData = childSnapshot.val();
-        console.log(childData);
 
-        dataPatient.push(childData);
+        var childData = childSnapshot.val();
+        // dataPatient.push(childData);
         that.setState({loaded: true});
-        // tempArray.concat(childData);
-        // that.setState(prevState => {
-        //   return {
-        //     dataPatient: prevState.dataPatient.concat(childData)
-        //   };
-        // });
+        that.setState(prevState => {
+          return {
+            dataPatient2: prevState.dataPatient2.concat(childData)
+          };
+        });
       });
     });
   }
@@ -210,14 +137,13 @@ export default class AllPrescriptionsScreen extends React.Component {
 
            <Content>
              <View style={{paddingVertical: 20}}>
-             //d0716b - middle
              <Button block style={{backgroundColor: "#c1514d"}} onPress={this._addNew}>
                <Text>Add New</Text>
              </Button>
              </View>
 
              <ListView
-               data={dataPatient}
+               data={this.state.dataPatient2}
                renderRow={this.renderRow.bind(this)}
              />
            </Content>
