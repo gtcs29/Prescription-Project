@@ -19,27 +19,71 @@ import GenerateForm from 'react-native-form-builder';
 const tempFields = [
   {
     type: 'text',
-    name: 'docName',
+    name: 'medName',
     required: true,
     icon: 'ios-person',
-    label: 'Doctor Name',
-  },
-  {
-    type: 'text',
-    name: 'patientName',
-    icon: 'ios-lock',
-    required: true,
-    label: 'Patient Name',
+    label: 'Medicine Name',
   },
   {
     type: 'date',
-    name: 'date',
+    name: 'startDate',
     mode: 'date',
     required: true,
-    label: 'Select Date',
+    label: 'Start Date',
     maxDate: new Date(2300, 7, 15),
     minDate: new Date(1880, 7, 15),
   },
+  {
+    type: 'date',
+    name: 'endDate',
+    mode: 'date',
+    required: true,
+    label: 'End Date',
+    maxDate: new Date(2300, 7, 15),
+    minDate: new Date(1880, 7, 15),
+  },
+  {
+    type: 'select',
+    name: 'Days',
+    required: true,
+    multiple: true,
+    label: 'Days',
+    options: ['Everyday', 'Alternate Days', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+  },
+  {
+    type: 'group',
+    name: 'Times',
+    required: true,
+    label: 'Choose Times',
+    fields: [
+      {
+        type: 'date',
+        name: 'Time1',
+        mode: 'time',
+        label: 'Time',
+      },
+      {
+        type: 'date',
+        name: 'Time2',
+        mode: 'time',
+        label: 'Time',
+      },
+      {
+        type: 'date',
+        name: 'Time3',
+        mode: 'time',
+        label: 'Time',
+      },
+      {
+        type: 'date',
+        name: 'Time4',
+        mode: 'time',
+        label: 'Time',
+      }
+
+    ]
+  },
+
 ]
 
 var form;
@@ -57,16 +101,6 @@ export default class MedicineFormScreen extends React.Component {
       form = this.props.navigation.state.params.newVar.data[this.props.navigation.state.params.newVar.key-1]
     }
   }
-
-  // componentWillMount = async() => {
-  //   console.log(.id);
-  //   try {
-  //      form = await AsyncStorage.getItem(this.props.navigation.state.params.newVar.id.toString());
-  //      form = JSON.parse(form);
-  //    } catch (error) {
-  //      console.log(error);
-  //    }
-  // }
 
   constructor(props) {
     super(props);
