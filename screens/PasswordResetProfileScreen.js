@@ -88,13 +88,31 @@ export default class PasswordResetProfileScreen extends React.Component {
     }
 
 
-    user.updateProfile({
-      password: password
-    }).then(function() {
-      this.props.navigation.navigate('Main')
-    }).catch(function(error) {
-      this.setState({error: error.toString()})
-    });
+    user.reauthenticateAndRetrieveDataWithCredential(firebase.auth.EmailAuthProvider.credential(user.email, oldPassword))
+      .then(() => {
+        console.log('bb')
+        user.updatePassword(password)
+          .then(function() {
+            console.log()
+            firebase.database().ref("users/" + userId+ "/auth/reset_password")
+              .update({ passwordReset: false })
+            axios.post(`${ROOT_URL}/resetPasswordEmail`, {
+              uid: userId
+            })
+              .then(() => {
+                that.props.navigation.navigate('Main')
+              })
+              .catch(err => {
+                return that.setState({error: error.toString(), password: '', verifyPassword: '' })
+              })
+          })
+          .catch(function(error) {
+            return that.setState({error: error.toString(), password: '', verifyPassword: '' })
+          });
+      })
+      .catch(function(error) {
+        that.setState({ error: error.toString(), oldPassword: '', password: '', verifyPassword: '' })
+      });
   }
 
 }
