@@ -19,77 +19,7 @@ import firebase from 'firebase';
 const window = Dimensions.get('window');
 
 var dataPatient = [];
-// const dataPatient = [
-//   {
-//   "Appointment0": "Fri Aug 01 2014",
-//   "Medicine0": {
-//     "medicine": "Med1",
-//     "medicineDosage": "2",
-//     },
-//   "Medicine1": {
-//     "medicine": "Med3",
-//     "medicineDosage": "3",
-//     },
-//   "amounts": {
-//     "appointments": 1,
-//     "diagnosis": 0,
-//     "medicines": 2,
-//     "testResults": 0,
-//     },
-//   "date": "Fri Aug 01 2014",
-//   "docName": "Doctor Name",
-//   "patientName": "Patient Name",
-//   },
-//   {
-//   "Appointment0": "Fri Aug 01 2014",
-//   "Appointment1": "Fri Aug 01 2014",
-//   "Appointment2": "Fri Aug 01 2014",
-//   "Medicine0": {
-//     "medicine": "Med1 WHEE",
-//     "medicineDosage": "2 WHEE",
-//     },
-//   "Medicine1": {
-//     "medicine": "Med3 WHEE",
-//     "medicineDosage": "3 WHEE",
-//     },
-//   "amounts": {
-//     "appointments": 3,
-//     "diagnosis": 2,
-//     "medicines": 1,
-//     "testResults": 1,
-//     },
-//   "date": "Fri Aug 01 2014",
-//   "docName": "Doctor Name WHEE",
-//   "Diagnosis0": "Diagnosis Test 1",
-//   "Diagnosis1": "Diagnosis Test 1",
-//   "testres0": "Test Result 1",
-//   "patientName": "Patient Name WHEE",
-//   },
-//   // {
-//   //   docName: "doc2",
-//   //   patientName: "patient2",
-//   //   date: "08/13/1996",
-//   //   medicine: "wheee"
-//   // },
-//   // {
-//   //   docName: "bowl",
-//   //   patientName: "soup",
-//   //   date: "vegetables",
-//   //
-//   // },
-//   // {
-//   //   docName: "John Doe",
-//   //   patientName: "Gitika Bose",
-//   //   date: "07/28/1987",
-//   //   medicine: "blah blah"
-//   // },
-//   // {
-//   //   docName: "John Doe",
-//   //   patientName: "Gitika Bose",
-//   //   date: "07/28/1987",
-//   //   medicine: "blah blah"
-//   // }
-// ]
+
 
 
 var counter = 0;

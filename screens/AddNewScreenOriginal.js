@@ -11,40 +11,10 @@ import {
 import { WebBrowser } from 'expo';
 import { ListView } from '@shoutem/ui';
 import { MonoText } from '../components/StyledText';
-import { List, ListItem, Icon, Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, Picker} from 'native-base';
+import { Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, Picker} from 'native-base';
 import firebase from 'firebase';
 
 import GenerateForm from 'react-native-form-builder';
-
-const tempFields = [
-  {
-    type: 'text',
-    name: 'docName',
-    required: true,
-    icon: 'ios-person',
-    label: 'Doctor Name',
-  },
-  {
-    type: 'text',
-    name: 'patientName',
-    icon: 'ios-lock',
-    required: true,
-    label: 'Patient Name',
-  },
-  {
-    type: 'date',
-    name: 'date',
-    mode: 'date',
-    required: true,
-    label: 'Select Date',
-    maxDate: new Date(2300, 7, 15),
-    minDate: new Date(1880, 7, 15),
-  },
-]
-
-const itemsConst = [
-
-];
 
 
 export default class AddNewScreen extends React.Component {
@@ -56,8 +26,92 @@ export default class AddNewScreen extends React.Component {
     super(props);
     this.confirm = this.confirm.bind(this);
     var i = 0;
+    var tempFields = [
+      {
+        type: 'text',
+        name: 'docName',
+        required: true,
+        icon: 'ios-person',
+        label: 'Doctor Name',
+      },
+      {
+        type: 'text',
+        name: 'patientName',
+        icon: 'ios-lock',
+        required: true,
+        label: 'Patient Name',
+      },
+      {
+        type: 'date',
+        name: 'date',
+        mode: 'date',
+        required: true,
+        label: 'Select Date',
+        maxDate: new Date(2300, 7, 15),
+        minDate: new Date(1880, 7, 15),
+      },
+    ]
+    while(i < this.props.navigation.state.params.newVar.meds) {
+      tempFields.push(
+        {
+          type: 'group',
+          name: 'Medicine' + i,
+          label: 'Medicine',
+          fields: [
+            {
+              type: 'text',
+              name: 'medicine',
+              label: 'Add Medicine',
+            },
+            {
+              type: 'text',
+              name: 'medicineDosage',
+              label: 'Add Dosage',
+            },
+          ]
+        });
+      i++;
+    }
+    var i = 0;
 
-    this.state = {fields: tempFields, selected1: 'ADD', items: itemsConst, id: 0}
+    while(i < this.props.navigation.state.params.newVar.appointments) {
+      tempFields.push({
+        type: 'date',
+        name: 'Appointment'+ i,
+        mode: 'date',
+        label: 'Appointment',
+        maxDate: new Date(2300, 7, 15),
+        minDate: new Date(1880, 7, 15),
+      });
+      i++;
+    }
+    var i = 0;
+    while(i < this.props.navigation.state.params.newVar.diagnosis) {
+      tempFields.push({
+        type: 'text',
+        name: 'Diagnosis'+ i,
+        required: true,
+        icon: 'ios-person',
+        label: 'Diagnosis',
+      });
+      i++;
+    }
+
+    var i = 0;
+
+    while(i < this.props.navigation.state.params.newVar.testres) {
+      tempFields.push({
+        type: 'text',
+        name: 'testres'+ i,
+        required: true,
+        icon: 'ios-person',
+        label: 'Test Results',
+      });
+      i++;
+    }
+
+
+    this.state = {fields: tempFields}
 
   }
 
@@ -83,35 +137,8 @@ export default class AddNewScreen extends React.Component {
     var that = this;
     firebase.database().ref("users/" + userId+ "/data/Prescriptions/").push(formValues)
 
-    this.props.navigation.navigate('Prescriptions');
+    this.props.navigation.navigate()
   }
-
-  addMed = () => {
-    this.setState({id:this.state.id+1});
-
-
-    var key = this.state.id.toString();
-
-    var name = 'Medicine ' + key;
-    itemsConst.push(name);
-    this.setState({items:itemsConst});
-    newVar = {
-      id: key
-    }
-    this.props.navigation.navigate('MedicineForm', {newVar});
-
-  }
-
-  renderForm = (item) => {
-    console.log(item);
-    var key = item.substring(-1);
-    console.log(key);
-    newVar = {
-      id: key
-    }
-    this.props.navigation.navigate('MedicineForm', {newVar});
-  }
-
 
   render() {
 
@@ -121,21 +148,6 @@ export default class AddNewScreen extends React.Component {
 
         <Content>
 
-          <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-            <Button small onPress={this.addMed}>
-              <Text> Medicine </Text>
-            </Button>
-            <Button small>
-              <Text> Appointment </Text>
-            </Button>
-            <Button small>
-              <Text> Test Result </Text>
-            </Button>
-            <Button small>
-              <Text> Medicine </Text>
-            </Button>
-
-          </View>
           <View>
             <GenerateForm
               ref={(c) => {
@@ -144,14 +156,6 @@ export default class AddNewScreen extends React.Component {
               fields={this.state.fields}
             />
           </View>
-
-          <List dataArray={this.state.items}
-            renderRow={(item) =>
-              <ListItem button onPress={() => this.renderForm(item)}>
-                <Text>{item}</Text>
-              </ListItem>
-            }>
-          </List>
 
           <View style={styles.submitButton}>
             <Button block onPress={() => this.confirm()}>

@@ -11,10 +11,8 @@ import SinglePrescriptionScreen from '../screens/SinglePrescriptionScreen';
 import PrescriptionSortScreen from '../screens/PrescriptionSortScreen';
 import AddNewScreen from '../screens/AddNewScreen';
 import betweenAddScreen from '../screens/betweenAddScreen';
-import ProfileLoginFormScreen from '../screens/ProfileLoginFormScreen';
-import ProfileMedicalFormScreen from '../screens/ProfileMedicalFormScreen';
-import ProfilePersonalFormScreen from '../screens/ProfilePersonalFormScreen';
 import PasswordResetProfileScreen from '../screens/PasswordResetProfileScreen';
+import MedicineFormScreen from '../screens/MedicineFormScreen';
 
 
 
@@ -54,9 +52,6 @@ RemindersStack.navigationOptions = {
 
 const SettingsStack = createStackNavigator({
   Settings: SettingsScreen,
-  ProfileLoginForm: ProfileLoginFormScreen,
-  ProfileMedicalForm: ProfileMedicalFormScreen,
-  ProfilePersonalForm: ProfilePersonalFormScreen,
   PasswordResetProfile: PasswordResetProfileScreen
 
 });
@@ -75,7 +70,8 @@ const PrescriptionsStack = createStackNavigator({
   Prescriptions: PrescriptionsScreen,
   SinglePrescription: SinglePrescriptionScreen,
   AddNew: AddNewScreen,
-  betweenAdd: betweenAddScreen
+  betweenAdd: betweenAddScreen,
+  MedicineForm: MedicineFormScreen
 });
 
 PrescriptionsStack.navigationOptions = {

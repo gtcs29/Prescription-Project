@@ -25,7 +25,7 @@ export default class SettingsScreen extends React.Component {
     title: 'Profile',
   };
   state = {
-    patientName: "Patient Test Name",
+    patientName: "Patient Name",
     username: "Username",
     email: "email",
     age: "age",
@@ -55,21 +55,28 @@ export default class SettingsScreen extends React.Component {
 
      return (
         <Container style={styles.container}>
+          <ImageBackground style={{width: window.width, height: 250}} source={require('../assets/images/tealBackground.png')} >
 
 
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}} >
-              <View style={{paddingVertical: 30, marginLeft: 10, marginRight: 5, alignItems: 'center', flexDirection: 'row'}}>
-                <Image style={{width: 100, height: 22}} source={require('../assets/images/logoTeal2.png')} />
+            <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}} >
+              <View style={{paddingTop: 50, alignItems: 'center', flexDirection: 'row'}}>
+                <Image style={{width: window.width, height: 130}} source={require('../assets/images/logoLoginWhite.png')} />
               </View>
-              <View style={{paddingVertical: 30, paddingHorizontal: 20}}>
-                <Text style={{fontWeight: 'bold'}}> {this.state.patientName} </Text>
-                <Text> {this.state.username} </Text>
+              <View style={{paddingBottom: 20, alignItems: 'center'}}>
+                <Text style={{fontWeight: 'bold', fontSize: 20, color: 'white'}}> {this.state.patientName} </Text>
+                <Text style={{fontSize: 20, color: 'white'}}> {this.state.username} </Text>
               </View>
             </View>
+            </ImageBackground>
+
+
             <Content>
+              <ListItem itemDivider>
+                <Text />
+              </ListItem>
               <ListItem icon>
                 <Left>
-                  <Button style={{ backgroundColor: "#FF9501" }}>
+                  <Button style={{ backgroundColor: "#4b8477" }}>
                     <Icon active name="ios-body" />
                   </Button>
                 </Left>
@@ -83,7 +90,7 @@ export default class SettingsScreen extends React.Component {
 
               <ListItem icon>
                 <Left>
-                  <Button style={{ backgroundColor: "#007AFF" }}>
+                  <Button style={{ backgroundColor: "#9abdb5" }}>
                     <Icon active name="ios-key" />
                   </Button>
                 </Left>
@@ -97,8 +104,8 @@ export default class SettingsScreen extends React.Component {
 
               <ListItem icon>
                 <Left>
-                  <Button style={{ backgroundColor: "#007AFF" }}>
-                    <Icon active name="ios-heart" />
+                  <Button style={{ backgroundColor: "#4b8477" }}>
+                    <Icon active name="heart" />
                   </Button>
                 </Left>
                 <Body>
@@ -115,7 +122,7 @@ export default class SettingsScreen extends React.Component {
 
               <ListItem icon>
                 <Left>
-                  <Button style={{ backgroundColor: "#007AFF" }}>
+                  <Button style={{ backgroundColor: "#9abdb5" }}>
                     <Icon active name="md-help" />
                   </Button>
                 </Left>
@@ -129,7 +136,7 @@ export default class SettingsScreen extends React.Component {
 
               <ListItem icon>
                 <Left>
-                  <Button style={{ backgroundColor: "#007AFF" }}>
+                  <Button style={{ backgroundColor: "#4b8477" }}>
                     <Icon active name="ios-information" />
                   </Button>
                 </Left>
