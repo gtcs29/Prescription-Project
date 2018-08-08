@@ -42,50 +42,63 @@ const tempFields = [
   },
 ]
 
-const form = {
-  docName: " ",
-  patientName: " "
-};
+var form;
 
 export default class MedicineFormScreen extends React.Component {
   static navigationOptions = {
     title: 'Prescriptions!',
   };
-
-  componentWillMount = async() => {
-    console.log(this.props.navigation.state.params.newVar.id);
-    try {
-       form = await AsyncStorage.getItem(this.props.navigation.state.params.newVar.id.toString());
-       form = JSON.parse(form);
-     } catch (error) {
-       console.log(error);
-     }
+  componentWillMount() {
+    console.log(this.props.navigation.state.params.newVar);
+    if(this.props.navigation.state.params.newVar.hasOwnProperty('data')){
+      console.log('bb')
+      console.log(this.props.navigation.state.params.newVar.key)
+      // console.log(data[this.props.navigation.state.params.newVar.key]);
+      form = this.props.navigation.state.params.newVar.data[this.props.navigation.state.params.newVar.key-1]
+    }
   }
+
+  // componentWillMount = async() => {
+  //   console.log(.id);
+  //   try {
+  //      form = await AsyncStorage.getItem(this.props.navigation.state.params.newVar.id.toString());
+  //      form = JSON.parse(form);
+  //    } catch (error) {
+  //      console.log(error);
+  //    }
+  // }
 
   constructor(props) {
     super(props);
     var i = 0;
-
-
     this.state = {fields: tempFields, selected1: 'ADD', doc: "", patientName: "", date: null}
-
-
-
   }
 
-  confirm = async() => {
+  confirm = () => {
     const formValues = this.formGenerator.getValues();
     console.log(formValues)
-    try {
-      if (formValues !== null)
-      {
-        await AsyncStorage.setItem(this.props.navigation.state.params.newVar.id.toString(), JSON.stringify(formValues));
-      }
-    } catch (error) {
-      console.log(error);
+    var data = this.props.navigation.state.params.newVar.data
+    var key = this.props.navigation.state.params.newVar.key
+    if(data.length === key-1){
+      data.push(formValues)
+    }
+    else{
+      data[key-1] = formValues
     }
 
-    this.props.navigation.navigate('AddNew')
+    var newVar = {
+      key,
+      data
+    }
+    this.props.navigation.navigate('AddNew', {newVar})
+    // try {
+    //   if (formValues !== null)
+    //   {
+    //     await AsyncStorage.setItem(this.props.navigation.state.params.newVar.id.toString(), JSON.stringify(formValues));
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   }
 
   render() {
@@ -121,12 +134,6 @@ export default class MedicineFormScreen extends React.Component {
 
     );
   }
-
-
-  _signOutAsync = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
-  };
 
 }
 

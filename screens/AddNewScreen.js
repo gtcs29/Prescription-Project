@@ -42,10 +42,10 @@ const tempFields = [
   },
 ]
 
-const itemsConst = [
+var items = [];
+var data= [
 
 ];
-
 
 export default class AddNewScreen extends React.Component {
   static navigationOptions = {
@@ -55,10 +55,18 @@ export default class AddNewScreen extends React.Component {
   constructor(props) {
     super(props);
     this.confirm = this.confirm.bind(this);
-    var i = 0;
+    this.state = {fields: tempFields, selected1: 'ADD', }
+  }
 
-    this.state = {fields: tempFields, selected1: 'ADD', items: itemsConst, id: 0}
-
+  componentWillMount() {
+    console.log(this.props.navigation.state.params.newVar);
+    if(this.props.navigation.state.params.newVar.hasOwnProperty('data')){
+      console.log('bb')
+      // console.log(this.props.navigation.state.params.newVar.key)
+      data = this.props.navigation.state.params.newVar.data;
+      // console.log(data[this.props.navigation.state.params.newVar.key]);
+      // form = this.props.navigation.state.params.newVar.data[this.props.navigation.state.params.newVar.key-1]
+    }
   }
 
   confirm() {
@@ -87,31 +95,32 @@ export default class AddNewScreen extends React.Component {
   }
 
   addMed = () => {
-    this.setState({id:this.state.id+1});
-
-
-    var key = this.state.id.toString();
-
+    var key = items.length + 1;
     var name = 'Medicine ' + key;
-    itemsConst.push(name);
-    this.setState({items:itemsConst});
-    newVar = {
-      id: key
+    items.push(name);
+    console.log(items);
+    var newVar = {
+      key,
+      data
     }
     this.props.navigation.navigate('MedicineForm', {newVar});
-
   }
 
   renderForm = (item) => {
     console.log(item);
-    var key = item.substring(-1);
+    var key = parseInt(item.charAt(item.length-1));
     console.log(key);
-    newVar = {
-      id: key
+    var newVar = {
+      key,
+      data
     }
+    // console.log(newVar);
     this.props.navigation.navigate('MedicineForm', {newVar});
   }
-
+  //
+  // componentWillMount() {
+  //   if(this.props.navigation.state.params.formValues)
+  // }
 
   render() {
 
@@ -145,7 +154,7 @@ export default class AddNewScreen extends React.Component {
             />
           </View>
 
-          <List dataArray={this.state.items}
+          <List dataArray={items}
             renderRow={(item) =>
               <ListItem button onPress={() => this.renderForm(item)}>
                 <Text>{item}</Text>
@@ -166,11 +175,6 @@ export default class AddNewScreen extends React.Component {
     );
   }
 
-
-  _signOutAsync = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
-  };
 
 }
 
