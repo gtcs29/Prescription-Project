@@ -42,18 +42,10 @@ const tempFields = [
   },
 ]
 
-const firebaseData = [
-  {
-    name: "med1",
-    dosage: "med11"
-  },
-  {
-    name: "med2",
-    dosage: "med22"
-  }
+var items = [];
+var data= [
 
-]
-
+];
 
 export default class AddNewScreen extends React.Component {
   static navigationOptions = {
@@ -63,14 +55,19 @@ export default class AddNewScreen extends React.Component {
   constructor(props) {
     super(props);
     this.confirm = this.confirm.bind(this);
-    var i = 0;
-
-    this.state = {fields: tempFields, selected1: 'ADD', id: 0}
-
+    this.state = {fields: tempFields, selected1: 'ADD', }
   }
-  // componentWillMount = () => {
-  //  GET DATA FROM FIREABSE AND SAVE IT INTO FIREBASE DATA (CURRENTLY HAS HARDCODED DATA) WHICH WILL BE USED TO RENDER THE LIST AND FORM
-  // }
+
+  componentWillMount() {
+    console.log(this.props.navigation.state.params.newVar);
+    if(this.props.navigation.state.params.newVar.hasOwnProperty('data')){
+      console.log('bb')
+      // console.log(this.props.navigation.state.params.newVar.key)
+      data = this.props.navigation.state.params.newVar.data;
+      // console.log(data[this.props.navigation.state.params.newVar.key]);
+      // form = this.props.navigation.state.params.newVar.data[this.props.navigation.state.params.newVar.key-1]
+    }
+  }
 
   confirm() {
     const formValues = this.formGenerator.getValues();
@@ -93,51 +90,37 @@ export default class AddNewScreen extends React.Component {
     var userId = firebase.auth().currentUser.uid;
     var that = this;
     firebase.database().ref("users/" + userId+ "/data/Prescriptions/").push(formValues)
-    // CHANGE THIS TO UPDATE FIREBASE UNIQUE PRESCRIPTION DATA
 
     this.props.navigation.navigate('Prescriptions');
   }
 
   addMed = () => {
-    // this.setState({id:this.state.id+1});
-
-
-    // var key = this.state.id.toString();
-
-    // var name = 'Medicine ' + key;
-    // itemsConst.push(name);
-    // this.setState({items:itemsConst});
-    newVar = {
-      medName: "",
-      medDosage: ""
+    var key = items.length + 1;
+    var name = 'Medicine ' + key;
+    items.push(name);
+    console.log(items);
+    var newVar = {
+      key,
+      data
     }
     this.props.navigation.navigate('MedicineForm', {newVar});
-
   }
 
-  renderRow(medicine) {
-    return(
-    <View style={styles.ListViewEven}>
-
-      <View style={{justifyContent: 'center' }}>
-        <Text style={{fontWeight: "bold"}}>{medicine.name}</Text>
-      </View>
-      <View style={{justifyContent: 'center'}}>
-        <Button block style={{backgroundColor: "#c1514d"}}
-          onPress={() => this._seeMedicine(medicine.name, medicine.dosage)}>
-          <Text>Press</Text>
-        </Button>
-      </View>
-    </View>)
-  }
-
-  _seeMedicine(name, dosage) {
-    newVar = {
-      medName: name,
-      medDosage: dosage
+  renderForm = (item) => {
+    console.log(item);
+    var key = parseInt(item.charAt(item.length-1));
+    console.log(key);
+    var newVar = {
+      key,
+      data
     }
-    this.props.navigation.navigate('MedicineForm', {newVar})
+    // console.log(newVar);
+    this.props.navigation.navigate('MedicineForm', {newVar});
   }
+  //
+  // componentWillMount() {
+  //   if(this.props.navigation.state.params.formValues)
+  // }
 
   render() {
 
@@ -148,17 +131,17 @@ export default class AddNewScreen extends React.Component {
         <Content>
 
           <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-            <Button small onPress={this.addMed} style={{backgroundColor: "#c1514d"}}>
+            <Button small onPress={this.addMed}>
               <Text> Medicine </Text>
             </Button>
-            <Button small style={{backgroundColor: "#c1514d"}}>
+            <Button small>
               <Text> Appointment </Text>
             </Button>
-            <Button small style={{backgroundColor: "#c1514d"}}>
+            <Button small>
               <Text> Test Result </Text>
             </Button>
-            <Button small style={{backgroundColor: "#c1514d"}}>
-              <Text> Diagnosis </Text>
+            <Button small>
+              <Text> Medicine </Text>
             </Button>
 
           </View>
@@ -171,13 +154,16 @@ export default class AddNewScreen extends React.Component {
             />
           </View>
 
-          <ListView
-            data={firebaseData}
-            renderRow={this.renderRow.bind(this)}
-          />
+          <List dataArray={items}
+            renderRow={(item) =>
+              <ListItem button onPress={() => this.renderForm(item)}>
+                <Text>{item}</Text>
+              </ListItem>
+            }>
+          </List>
 
           <View style={styles.submitButton}>
-            <Button block style={{backgroundColor: '#c1514d'}} onPress={() => this.confirm()}>
+            <Button block onPress={() => this.confirm()}>
               <Text>Confirm</Text>
             </Button>
           </View>
@@ -189,11 +175,6 @@ export default class AddNewScreen extends React.Component {
     );
   }
 
-
-  _signOutAsync = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
-  };
 
 }
 
@@ -211,9 +192,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomColor: '#000000',
     borderBottomWidth:1,
-    backgroundColor: '#fbf5f3',
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    backgroundColor: '#eae0ff'
   },
   container: {
     flex: 1,
