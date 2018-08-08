@@ -42,17 +42,12 @@ const tempFields = [
   },
 ]
 
-const firebaseData = [
-  {
-    name: "med1",
-    dosage: "med11"
-  },
-  {
-    name: "med2",
-    dosage: "med22"
-  }
+const itemsConst = [
 
-]
+];
+
+// firebaseData = [
+// ]
 
 
 export default class AddNewScreen extends React.Component {
@@ -65,12 +60,9 @@ export default class AddNewScreen extends React.Component {
     this.confirm = this.confirm.bind(this);
     var i = 0;
 
-    this.state = {fields: tempFields, selected1: 'ADD', id: 0}
+    this.state = {fields: tempFields, selected1: 'ADD', items: itemsConst, id: 0}
 
   }
-  // componentWillMount = () => {
-  //  GET DATA FROM FIREABSE AND SAVE IT INTO FIREBASE DATA (CURRENTLY HAS HARDCODED DATA) WHICH WILL BE USED TO RENDER THE LIST AND FORM
-  // }
 
   confirm() {
     const formValues = this.formGenerator.getValues();
@@ -93,51 +85,36 @@ export default class AddNewScreen extends React.Component {
     var userId = firebase.auth().currentUser.uid;
     var that = this;
     firebase.database().ref("users/" + userId+ "/data/Prescriptions/").push(formValues)
-    // CHANGE THIS TO UPDATE FIREBASE UNIQUE PRESCRIPTION DATA
 
     this.props.navigation.navigate('Prescriptions');
   }
 
   addMed = () => {
-    // this.setState({id:this.state.id+1});
+    this.setState({id:this.state.id+1});
 
 
-    // var key = this.state.id.toString();
+    var key = this.state.id.toString();
 
-    // var name = 'Medicine ' + key;
-    // itemsConst.push(name);
-    // this.setState({items:itemsConst});
+    var name = 'Medicine ' + key;
+    itemsConst.push(name);
+    this.setState({items:itemsConst});
     newVar = {
-      medName: "",
-      medDosage: ""
+      id: key
     }
     this.props.navigation.navigate('MedicineForm', {newVar});
 
   }
 
-  renderRow(medicine) {
-    return(
-    <View style={styles.ListViewEven}>
-
-      <View style={{justifyContent: 'center' }}>
-        <Text style={{fontWeight: "bold"}}>{medicine.name}</Text>
-      </View>
-      <View style={{justifyContent: 'center'}}>
-        <Button block style={{backgroundColor: "#c1514d"}}
-          onPress={() => this._seeMedicine(medicine.name, medicine.dosage)}>
-          <Text>Press</Text>
-        </Button>
-      </View>
-    </View>)
-  }
-
-  _seeMedicine(name, dosage) {
+  renderForm = (item) => {
+    console.log(item);
+    var key = item.substring(-1);
+    console.log(key);
     newVar = {
-      medName: name,
-      medDosage: dosage
+      id: key
     }
-    this.props.navigation.navigate('MedicineForm', {newVar})
+    this.props.navigation.navigate('MedicineForm', {newVar});
   }
+
 
   render() {
 
@@ -148,17 +125,17 @@ export default class AddNewScreen extends React.Component {
         <Content>
 
           <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-            <Button small onPress={this.addMed} style={{backgroundColor: "#c1514d"}}>
+            <Button small onPress={this.addMed}>
               <Text> Medicine </Text>
             </Button>
-            <Button small style={{backgroundColor: "#c1514d"}}>
+            <Button small>
               <Text> Appointment </Text>
             </Button>
-            <Button small style={{backgroundColor: "#c1514d"}}>
+            <Button small>
               <Text> Test Result </Text>
             </Button>
-            <Button small style={{backgroundColor: "#c1514d"}}>
-              <Text> Diagnosis </Text>
+            <Button small>
+              <Text> Medicine </Text>
             </Button>
 
           </View>
@@ -171,13 +148,16 @@ export default class AddNewScreen extends React.Component {
             />
           </View>
 
-          <ListView
-            data={firebaseData}
-            renderRow={this.renderRow.bind(this)}
-          />
+          <List dataArray={this.state.items}
+            renderRow={(item) =>
+              <ListItem button onPress={() => this.renderForm(item)}>
+                <Text>{item}</Text>
+              </ListItem>
+            }>
+          </List>
 
           <View style={styles.submitButton}>
-            <Button block style={{backgroundColor: '#c1514d'}} onPress={() => this.confirm()}>
+            <Button block onPress={() => this.confirm()}>
               <Text>Confirm</Text>
             </Button>
           </View>
@@ -211,9 +191,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomColor: '#000000',
     borderBottomWidth:1,
-    backgroundColor: '#fbf5f3',
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    backgroundColor: '#eae0ff'
   },
   container: {
     flex: 1,
