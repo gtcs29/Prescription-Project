@@ -72,7 +72,7 @@ export default class SinglePrescriptionScreen extends React.Component {
 
 
   render() {
-
+    console.log(this.props.navigation.state.params.newVar);
     return (
 
 

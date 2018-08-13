@@ -155,7 +155,20 @@ export default class AllPrescriptionsScreen extends React.Component {
    }
 
   _addNew = () => {
-    newVar = {   }
+    var medicinesList = [];
+    var AppointmentList = [];
+    var DiagnosisList = [];
+    var TestResultList = [];
+    var PictureList = [];
+    var data= {};
+    newVar = {
+      medicinesList,
+      AppointmentList,
+      DiagnosisList,
+      TestResultList,
+      PictureList,
+      data
+    }
     this.props.navigation.navigate('AddNew', {newVar});
   };
 
@@ -169,14 +182,7 @@ export default class AllPrescriptionsScreen extends React.Component {
       diagnosis: diagnosis,
       testres: testres
     }
-
-
     this.props.navigation.navigate('SinglePrescription', {newVar});
-  };
-
-  _signOutAsync = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
   };
 
 }
