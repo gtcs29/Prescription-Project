@@ -19,78 +19,18 @@ import GenerateForm from 'react-native-form-builder';
 const tempFields = [
   {
     type: 'text',
-    name: 'medName',
+    name: 'diagnosis',
     required: true,
-    icon: 'ios-person',
-    label: 'Medicine Name',
-  },
-  {
-    type: 'date',
-    name: 'startDate',
-    mode: 'date',
-    required: true,
-    label: 'Start Date',
-    maxDate: new Date(2300, 7, 15),
-    minDate: new Date(1880, 7, 15),
-  },
-  {
-    type: 'date',
-    name: 'endDate',
-    mode: 'date',
-    required: true,
-    label: 'End Date',
-    maxDate: new Date(2300, 7, 15),
-    minDate: new Date(1880, 7, 15),
-  },
-  {
-    type: 'select',
-    name: 'Days',
-    required: true,
-    multiple: true,
-    label: 'Days',
-    options: ['Everyday', 'Alternate Days', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-  },
-  {
-    type: 'group',
-    name: 'Times',
-    required: true,
-    label: 'Choose Times',
-    fields: [
-      {
-        type: 'date',
-        name: 'Time1',
-        mode: 'time',
-        label: 'Time',
-      },
-      {
-        type: 'date',
-        name: 'Time2',
-        mode: 'time',
-        label: 'Time',
-      },
-      {
-        type: 'date',
-        name: 'Time3',
-        mode: 'time',
-        label: 'Time',
-      },
-      {
-        type: 'date',
-        name: 'Time4',
-        mode: 'time',
-        label: 'Time',
-      }
-
-    ]
-  },
-
+    icon: 'ios-medical',
+    label: 'Diagnosis',
+  }
 ]
 
 var form;
 
-export default class MedicineFormScreen extends React.Component {
+export default class DiagnosisFormScreen extends React.Component {
   static navigationOptions = {
-    title: 'Prescriptions!',
+    title: 'Diagnosis!',
   };
   componentWillMount() {
     if(this.props.navigation.state.params.newVar.hasOwnProperty('data')){
@@ -109,16 +49,15 @@ export default class MedicineFormScreen extends React.Component {
     const formValues = this.formGenerator.getValues();
     var data = this.props.navigation.state.params.newVar.data
     var name = this.props.navigation.state.params.newVar.name
-    var medicinesList = this.props.navigation.state.params.newVar.medicinesList
-    data[name] = formValues
-    if(!(medicinesList.indexOf(name) >= 0)){
-      console.log('a')
-      medicinesList.push(name);
+    var DiagnosisList = this.props.navigation.state.params.newVar.DiagnosisList
+    if(!(DiagnosisList.indexOf(name) >= 0)){
+      DiagnosisList.push(name);
     }
+    data[name] = formValues
     var newVar =
     {
       data,
-      medicinesList
+      DiagnosisList
     }
     this.props.navigation.navigate('AddNew', {newVar})
   }
