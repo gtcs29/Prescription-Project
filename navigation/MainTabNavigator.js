@@ -38,6 +38,7 @@ HomeStack.navigationOptions = {
 
 const RemindersStack = createStackNavigator({
   Reminders: RemindersScreen,
+  Prescriptions: PrescriptionsScreen
 });
 
 RemindersStack.navigationOptions = {

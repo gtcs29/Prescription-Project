@@ -1,9 +1,9 @@
 {
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
-  "expoServerPort": null,
-  "devToolsPort": 19003
+  "packagerPort": 19003,
+  "packagerPid": 17172,
+  "expoServerNgrokUrl": "https://sa-jp7.gitika.prescription-project.exp.direct",
+  "packagerNgrokUrl": "https://packager.sa-jp7.gitika.prescription-project.exp.direct",
+  "ngrokPid": 17196,
+  "expoServerPort": 19000,
+  "devToolsPort": 19002
 }

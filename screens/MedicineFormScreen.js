@@ -93,9 +93,7 @@ export default class MedicineFormScreen extends React.Component {
     title: 'Prescriptions!',
   };
   componentWillMount() {
-    console.log(this.props.navigation.state.params.newVar);
     if(this.props.navigation.state.params.newVar.hasOwnProperty('data')){
-      console.log('bb')
       console.log(this.props.navigation.state.params.newVar.key)
       // console.log(data[this.props.navigation.state.params.newVar.key]);
       form = this.props.navigation.state.params.newVar.data[this.props.navigation.state.params.newVar.key-1]
@@ -109,6 +107,7 @@ export default class MedicineFormScreen extends React.Component {
   }
 
   confirm = () => {
+
     const formValues = this.formGenerator.getValues();
     console.log(formValues)
     var data = this.props.navigation.state.params.newVar.data
