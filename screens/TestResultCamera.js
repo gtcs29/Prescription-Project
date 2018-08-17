@@ -88,12 +88,11 @@ export default class TestResultCamera extends React.Component {
     }
 
     if (this.state.enablePreview) {
-      // console.log(newVar);
       return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
           <ImageBackground
             style={{width: '100%', height: '100%'}}
-            source={{ uri: `data:image/jpg;base64,${this.state.previewImageData}` }}
+            source={{ uri: `data:image/jpeg;base64,${this.state.previewImageData}` }}
             resizeMode="contain"
           />
             <View style={{

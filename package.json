@@ -24,6 +24,7 @@
     "react-native-form-builder": "^1.0.15",
     "react-native-permissions": "^1.1.1",
     "react-native-push-notification": "^3.1.1",
+    "react-native-material-menu": "^0.4.0",
     "react-native-searchbar": "^1.15.0",
     "react-native-smart-splash-screen": "^2.3.5",
     "react-native-splash-screen": "^3.1.0",
