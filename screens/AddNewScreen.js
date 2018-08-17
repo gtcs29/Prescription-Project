@@ -6,7 +6,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { ListView } from '@shoutem/ui';
@@ -14,6 +15,9 @@ import { MonoText } from '../components/StyledText';
 import { List, ListItem, Icon, Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, Picker, Separator} from 'native-base';
 import firebase from 'firebase';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import Enotype from "react-native-vector-icons/Entypo";
+
+import Menu, { MenuItem } from 'react-native-material-menu';
 
 import GenerateForm from 'react-native-form-builder';
 
@@ -58,10 +62,11 @@ export default class AddNewScreen extends React.Component {
   constructor(props) {
     super(props);
     this.confirm = this.confirm.bind(this);
-    this.state = {fields: tempFields, selected1: 'ADD', }
+    this.state = {fields: tempFields, selected1: 'ADD', menu: 'hide', delete: false}
   }
 
   removeFromList = (name) => {
+    this.hideMenu();
     if(!medicinesList[name] === undefined ){
       delete medicinesList[name]
     }
@@ -80,21 +85,36 @@ export default class AddNewScreen extends React.Component {
   }
 
   remove = (name) => {
+    this.hideMenu();
     delete data[name]
     removeFromList(name)
   }
 
+  deleteAll = () => {
+    Alert.alert(
+      'Selete Prescription',
+      'Are you sure you want to delete all the prescription?',
+      [
+        {text: 'OK', onPress: () => this.setState({ delete: true })},
+        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+      ],
+      { cancelable: false }
+    )
+  }
+
   confirm() {
+    this.hideMenu();
     const formValues = this.formGenerator.getValues();
     var medicineNumber = 0;
     var appointmentsNumber = 0;
     var diagnosisNumber = 0;
     var testResultsNumber = 0;
+    var picturesNumber = 0;
     var medicines = [];
     var appointments = [];
     var diagnosis = [];
     var testResults = [];
-
+    var pictures = [];
     for(var key in data) {
       if(data.hasOwnProperty(key)){
         var key_string = JSON.stringify(key)
@@ -110,9 +130,13 @@ export default class AddNewScreen extends React.Component {
           diagnosis.push(data[key]);
           diagnosisNumber++;
         }
-        else{
+        else if (key_string.includes('Test Result')) {
           testResults.push(data[key]);
           testResultsNumber++;
+        }
+        else {
+          pictures.push(data[key]);
+          picturesNumber++;
         }
       }
     }
@@ -135,11 +159,31 @@ export default class AddNewScreen extends React.Component {
       diagnosis: diagnosis,
       testResults: testResults
     }
-    console.log(newVar)
-
-    // var userId = firebase.auth().currentUser.uid;
-    // var that = this;
-    // firebase.database().ref("users/" + userId+ "/data/Prescriptions/").push(formValues)
+    var userId = firebase.auth().currentUser.uid;
+    var that = this;
+    var key;
+    firebase.database().ref("users/" + userId+ "/data/Prescriptions/").push(newVar)
+      .then(res => {key=res.getKey()})
+      .catch(err => console.log(err))
+    var storageString = `users/${userId}/data/Prescriptions/${key}/`;
+    var storageRef = firebase.storage().ref();
+    var i = 0;
+    for(var keyPictures in PictureList){
+      var picture = pictures[i].imageData;
+      var pictureString = `data:image/jpg;base64,${picture}`;
+      var childString = storageString+keyPictures
+      var childRef = storageRef.child(`${childString}`)
+      fetch(pictureString)
+        .then(res => res.blob())
+        .then(blob => {
+          childRef.put(blob)
+            .then(function(snapshot) {
+              console.log('Uploaded an image!');
+            })
+        })
+        .catch(err => console.log(err))
+      i++;
+    }
     medicinesList = [];
     AppointmentList = [];
     DiagnosisList = [];
@@ -151,6 +195,7 @@ export default class AddNewScreen extends React.Component {
   }
 
   addMed = () => {
+    this.hideMenu();
     var key = medicinesList.length + 1;
     var name = 'Medicine ' + key;
     var newVar = {
@@ -162,6 +207,7 @@ export default class AddNewScreen extends React.Component {
   }
 
   addAppointment = () => {
+    this.hideMenu();
     var key = AppointmentList.length + 1;
     var name = 'Appointment ' + key;
     var newVar = {
@@ -173,6 +219,7 @@ export default class AddNewScreen extends React.Component {
   }
 
   addDiagnosis = () => {
+    this.hideMenu();
     var key = DiagnosisList.length + 1;
     var name = 'Diagnosis ' + key;
     var newVar = {
@@ -184,6 +231,7 @@ export default class AddNewScreen extends React.Component {
   }
 
   addTestResult = () => {
+    this.hideMenu();
     var key = TestResultList.length + 1;
     var name = 'Test Result ' + key;
     var newVar = {
@@ -195,8 +243,9 @@ export default class AddNewScreen extends React.Component {
   }
 
   addPicture = () => {
+    this.hideMenu();
     var key = PictureList.length + 1;
-    var name = 'Image ' + key;
+    var name = 'Image-' + key + '.jpg';
     var newVar = {
       name,
       data,
@@ -206,6 +255,7 @@ export default class AddNewScreen extends React.Component {
   }
 
   renderFormMedicine = (item) => {
+    this.hideMenu();
     var name = item;
     var newVar = {
       name,
@@ -216,6 +266,7 @@ export default class AddNewScreen extends React.Component {
   }
 
   renderFormAppointment = (item) => {
+    this.hideMenu();
     var name = item;
     var newVar = {
       name,
@@ -226,6 +277,7 @@ export default class AddNewScreen extends React.Component {
   }
 
   renderFormDiagnosis = (item) => {
+    this.hideMenu();
     var name = item;
     var newVar = {
       name,
@@ -236,6 +288,7 @@ export default class AddNewScreen extends React.Component {
   }
 
   renderFormTestResult = (item) => {
+    this.hideMenu();
     var name = item;
     var newVar = {
       name,
@@ -246,6 +299,7 @@ export default class AddNewScreen extends React.Component {
   }
 
   renderFormPictures = (item) => {
+    this.hideMenu();
     var name = item;
     var newVar = {
       name,
@@ -255,49 +309,109 @@ export default class AddNewScreen extends React.Component {
     this.props.navigation.navigate('TestResultCamera', {newVar});
   }
 
-  render() {
-    data = this.props.navigation.state.params.newVar.data;
-    console.log(data)
-    if(this.props.navigation.state.params.newVar.hasOwnProperty('medicinesList')){
-      medicinesList = this.props.navigation.state.params.newVar.medicinesList
-    }
-    if(this.props.navigation.state.params.newVar.hasOwnProperty('AppointmentList')){
-      AppointmentList = this.props.navigation.state.params.newVar.AppointmentList
-    }
-    if(this.props.navigation.state.params.newVar.hasOwnProperty('DiagnosisList')){
-      DiagnosisList = this.props.navigation.state.params.newVar.DiagnosisList
-    }
-    if(this.props.navigation.state.params.newVar.hasOwnProperty('TestResultList')){
-      TestResultList = this.props.navigation.state.params.newVar.TestResultList
-    }
-    if(this.props.navigation.state.params.newVar.hasOwnProperty('PictureList')){
-      PictureList = this.props.navigation.state.params.newVar.PictureList
-    }
+  renderDelete() {
+    return(
+      <Ionicons.Button name="ios-trash" backgroundColor='#ffffff' size={30} color='red' onPress={this.deleteAll} />
+    )
+  }
 
+  renderPrescription() {
+    return <Text style={{ width: '80%', textAlign: 'center', fontSize: 25}}>Prescription</Text>
+  }
+
+  _menu = null;
+
+  setMenuRef = ref => {
+    this._menu = ref;
+  };
+
+  hideMenu = () => {
+    this._menu.hide();
+  };
+
+  showMenu = () => {
+    this._menu.show();
+  }
+
+  renderPictureMenu() {
+    return(
+      <View style={{ flex: 1, paddingLeft:15, paddingTop: 5, flexDirection: 'row' }}>
+        <Ionicons name='md-camera' size={15} />
+        <Text style={{ marginLeft: 5, fontSize: 15}}>Picture</Text>
+      </View>
+    )
+  }
+
+  renderIconMenu() {
+    return(
+      <Enotype name='plus' size={30} style={{ borderWidth: 1}}/>
+    );
+  }
+
+  renderDropdown() {
+    return (
+      <View>
+        <Menu
+          ref={this.setMenuRef}
+          button={<Text onPress={this.showMenu}>{this.renderIconMenu()}</Text>}
+        >
+          <MenuItem onPress={this.addMed}>Medicine</MenuItem>
+          <MenuItem onPress={this.addAppointment}>Appointment</MenuItem>
+          <MenuItem onPress={this.addDiagnosis}>Diagnosis</MenuItem>
+          <MenuItem onPress={this.addTestResult}>Test Results</MenuItem>
+          <MenuItem onPress={this.addPicture}>{this.renderPictureMenu()}</MenuItem>
+        </Menu>
+      </View>
+    );
+  }
+
+  render() {
+    if(this.state.delete === true) {
+      medicinesList = [];
+      AppointmentList = [];
+      DiagnosisList = [];
+      TestResultList = [];
+      PictureList = [];
+      data= {};
+      var newVar = {
+        medicinesList,
+        AppointmentList,
+        DiagnosisList,
+        TestResultList,
+        PictureList,
+        data
+      }
+      this.props.navigation.state.params.newVar = newVar
+      this.state.delete=false;
+    }
+    else {
+      data = this.props.navigation.state.params.newVar.data;
+      if(this.props.navigation.state.params.newVar.hasOwnProperty('medicinesList')){
+        medicinesList = this.props.navigation.state.params.newVar.medicinesList
+      }
+      if(this.props.navigation.state.params.newVar.hasOwnProperty('AppointmentList')){
+        AppointmentList = this.props.navigation.state.params.newVar.AppointmentList
+      }
+      if(this.props.navigation.state.params.newVar.hasOwnProperty('DiagnosisList')){
+        DiagnosisList = this.props.navigation.state.params.newVar.DiagnosisList
+      }
+      if(this.props.navigation.state.params.newVar.hasOwnProperty('TestResultList')){
+        TestResultList = this.props.navigation.state.params.newVar.TestResultList
+      }
+      if(this.props.navigation.state.params.newVar.hasOwnProperty('PictureList')){
+        PictureList = this.props.navigation.state.params.newVar.PictureList
+      }
+    }
 
     return (
 
       <Container style={styles.container} contentContainerStyle={styles.contentContainer}>
 
         <Content>
-
-          <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-            <Button small onPress={this.addMed}>
-              <Text> Medicine </Text>
-            </Button>
-            <Button small onPress={this.addAppointment}>
-              <Text> Appointment </Text>
-            </Button>
-            <Button small onPress={this.addDiagnosis}>
-              <Text> Diagnosis </Text>
-            </Button>
-            <Button small onPress={this.addTestResult}>
-              <Text> Test Results </Text>
-            </Button>
-            <Button small iconLeft onPress={this.addPicture}>
-              <Ionicons name='md-camera' size={23} />
-              <Text>Picture</Text>
-            </Button>
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            {this.renderDelete()}
+            {this.renderPrescription()}
+            {this.renderDropdown()}
           </View>
 
           <View>
@@ -398,15 +512,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    padding: 10,
     backgroundColor: '#fff',
   },
 
-  contentContainer: {
-    paddingTop: 30,
+  submitButton: {
+    paddingHorizontal: 10,
+    paddingTop: 20,
   },
-    submitButton: {
-      paddingHorizontal: 10,
-      paddingTop: 20,
-    },
 
 });

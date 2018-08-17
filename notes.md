@@ -32,3 +32,7 @@ Others:
 ---
 Future:
 * Do we wanna keep sign in using Username or Email?
+* https://itnext.io/react-native-tab-bar-is-customizable-c3c37dcf711f
+* https://medium.com/@victorvarghese/super-cool-material-ui-components-in-react-native-dd7c4434bc26
+* https://blog.pusher.com/animation-react-native-part-2/
+* https://code.tutsplus.com/tutorials/practical-animations-in-react-native--cms-27567
