@@ -6,16 +6,31 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from 'react-native';
-import { WebBrowser } from 'expo';
 import { ListView } from '@shoutem/ui';
 import { MonoText } from '../components/StyledText';
 import { List, ListItem, Icon, Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, Picker, Separator} from 'native-base';
 import firebase from 'firebase';
 import Ionicons from "react-native-vector-icons/Ionicons";
 
+import { WebBrowser, Notifications, Permissions} from 'expo';
+
 import GenerateForm from 'react-native-form-builder';
+
+const eventObject = Expo.Notifications.addListener(()=>
+  Alert.alert(
+    'Alert Title',
+    'My Alert Msg',
+    [
+      {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+      {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ],
+    { cancelable: false }
+  )
+)
 
 const tempFields = [
   {
@@ -49,6 +64,9 @@ var DiagnosisList = [];
 var TestResultList = [];
 var PictureList = [];
 var data= {};
+var reminderIds = [];
+
+var idR = "";
 
 export default class AddNewScreen extends React.Component {
   static navigationOptions = {
@@ -58,7 +76,19 @@ export default class AddNewScreen extends React.Component {
   constructor(props) {
     super(props);
     this.confirm = this.confirm.bind(this);
-    this.state = {fields: tempFields, selected1: 'ADD', }
+    this.state = {fields: tempFields, selected1: 'ADD', idR: "", eventS: {}}
+  }
+
+  async componentWillMount() {
+    const { Permissions } = Expo;
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (status === 'granted') {
+      console.log(status);
+    } else {
+      throw new Error('Notification permission not granted');
+    }
+
+
   }
 
   removeFromList = (name) => {
@@ -95,6 +125,10 @@ export default class AddNewScreen extends React.Component {
     var diagnosis = [];
     var testResults = [];
 
+    data["date"] = formValues["date"];
+    data["docName"] = formValues["date"];
+    data["patientName"] = formValues["date"];
+
     for(var key in data) {
       if(data.hasOwnProperty(key)){
         var key_string = JSON.stringify(key)
@@ -128,18 +162,55 @@ export default class AddNewScreen extends React.Component {
     var newVar = {
       patientName: patientName,
       docName: docName,
-      date: date,
+      date: date.toDateString(),
       amount: amounts,
       medicines: medicines,
       appointments: appointments,
       diagnosis: diagnosis,
       testResults: testResults
     }
-    console.log(newVar)
 
-    // var userId = firebase.auth().currentUser.uid;
-    // var that = this;
-    // firebase.database().ref("users/" + userId+ "/data/Prescriptions/").push(formValues)
+    // console.log(newVar)
+
+
+    for(var i = 0; i < newVar.amount.medicines; i++) {
+      if(newVar.medicines[i].endDate !== null) {
+        newVar.medicines[i].endDate = newVar.medicines[i].endDate.toDateString();
+      }
+      if(newVar.medicines[i].startDate !== null) {
+        newVar.medicines[i].startDate = newVar.medicines[i].startDate.toDateString();
+      }
+      for (var n=1; n < 5; n++) {
+        var tim = "Time"+n;
+
+        if(newVar.medicines[i].Times[tim] !== null) {
+          newVar.medicines[i].Times[tim] = newVar.medicines[i].Times[tim].toTimeString();
+          this.handlePress(newVar.medicines[i].medName, newVar.medicines[i].startDate, newVar.medicines[i].Times[tim], newVar.medicines[i].Days[0]);
+          // var notifNumber = "notifId" + i + n;
+          // newVar.medicines[i][notifNumber] = idR;
+          // console.log("whee" + idR);
+          // console.log(newVar.medicines[i][notifNumber]);
+          // console.log(idR);
+        }
+      }
+      newVar.medicines[i]['reminders'] = reminderIds;
+    }
+
+    for(var i = 0; i < newVar.amount.appointments; i++) {
+      if(newVar.appointments[i].appointmentDate !== null) {
+      newVar.appointments[i].appointmentDate = newVar.appointments[i].appointmentDate.toDateString();
+}
+      if(newVar.appointments[i].appointmentTime !== null) {
+      newVar.appointments[i].appointmentTime = newVar.appointments[i].appointmentTime.toTimeString();
+    }
+    }
+
+    // console.log(newVar)
+    var userId = firebase.auth().currentUser.uid;
+    var that = this;
+
+    console.log(newVar)
+    firebase.database().ref("users/" + userId+ "/data/Prescriptions/").push(newVar)
     medicinesList = [];
     AppointmentList = [];
     DiagnosisList = [];
@@ -253,6 +324,62 @@ export default class AddNewScreen extends React.Component {
       PictureList
     }
     this.props.navigation.navigate('TestResultCamera', {newVar});
+  }
+
+  handlePress = (medName, date, time, repeat) => {
+
+
+    var localNotification =  {
+      title: medName,
+      body: medName,
+      ios: {
+        sound: true
+      },
+      android:
+      {
+        sound: true,
+        priority: 'high',
+        sticky: false,
+        vibrate: true
+      },
+    }
+
+    var dateTime = date + " " + time;
+
+    let t = Date.parse(dateTime);
+
+    if (repeat = 'Everyday')
+    {
+      var schedulingOptions = {
+          time: t, // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
+          repeat: 'day'
+      }
+    }
+    else {
+      var schedulingOptions = {
+          time: t, // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
+      }
+    }
+
+
+    Expo.Notifications.scheduleLocalNotificationAsync (
+        localNotification,
+        schedulingOptions
+      )
+    .then((id) => {
+      reminderIds.push(id);
+      this.setState({idR: id});
+      console.log(id);
+    })
+    .catch((error) =>{
+      return(error)
+      console.log(error);
+    })
+  }
+
+  handleDelete = () => {
+    Expo.Notifications.cancelScheduledNotificationAsync(this.state.idR);
+
   }
 
   render() {
