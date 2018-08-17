@@ -19,78 +19,44 @@ import GenerateForm from 'react-native-form-builder';
 const tempFields = [
   {
     type: 'text',
-    name: 'medName',
-    required: true,
+    name: 'docName',
     icon: 'ios-person',
-    label: 'Medicine Name',
+    label: 'Doctor Name',
+  },
+  {
+    type: 'text',
+    name: 'clinicName',
+    icon: 'ios-medical',
+    label: 'Clinic name',
+  },
+  {
+    type: 'text',
+    name: 'clinicAddress',
+    icon: 'ios-home',
+    label: 'Clinic Address',
   },
   {
     type: 'date',
-    name: 'startDate',
+    name: 'appointmentDate',
     mode: 'date',
     required: true,
-    label: 'Start Date',
+    label: 'Appointment Date',
     maxDate: new Date(2300, 7, 15),
     minDate: new Date(1880, 7, 15),
   },
   {
     type: 'date',
-    name: 'endDate',
-    mode: 'date',
-    required: true,
-    label: 'End Date',
-    maxDate: new Date(2300, 7, 15),
-    minDate: new Date(1880, 7, 15),
-  },
-  {
-    type: 'select',
-    name: 'Days',
-    required: true,
-    multiple: true,
-    label: 'Days',
-    options: ['Everyday', 'Alternate Days'],
-  },
-  {
-    type: 'group',
-    name: 'Times',
-    required: true,
-    label: 'Choose Times',
-    fields: [
-      {
-        type: 'date',
-        name: 'Time1',
-        mode: 'time',
-        label: 'Time',
-      },
-      {
-        type: 'date',
-        name: 'Time2',
-        mode: 'time',
-        label: 'Time',
-      },
-      {
-        type: 'date',
-        name: 'Time3',
-        mode: 'time',
-        label: 'Time',
-      },
-      {
-        type: 'date',
-        name: 'Time4',
-        mode: 'time',
-        label: 'Time',
-      }
-
-    ]
-  },
-
+    name: 'appointmentTime',
+    mode: 'time',
+    label: 'Appointment Time',
+  }
 ]
 
 var form;
 
-export default class MedicineFormScreen extends React.Component {
+export default class AppointmentFormScreen extends React.Component {
   static navigationOptions = {
-    title: 'Prescriptions!',
+    title: 'Appointment!',
   };
   componentWillMount() {
     if(this.props.navigation.state.params.newVar.hasOwnProperty('data')){
@@ -106,21 +72,18 @@ export default class MedicineFormScreen extends React.Component {
   }
 
   confirm = () => {
-
     const formValues = this.formGenerator.getValues();
-
     var data = this.props.navigation.state.params.newVar.data
     var name = this.props.navigation.state.params.newVar.name
-    var medicinesList = this.props.navigation.state.params.newVar.medicinesList
-    data[name] = formValues
-    if(!(medicinesList.indexOf(name) >= 0)){
-      console.log('a')
-      medicinesList.push(name);
+    var AppointmentList = this.props.navigation.state.params.newVar.AppointmentList
+    if(!(AppointmentList.indexOf(name) >= 0)){
+      AppointmentList.push(name);
     }
+    data[name] = formValues
     var newVar =
     {
       data,
-      medicinesList
+      AppointmentList
     }
     this.props.navigation.navigate('AddNew', {newVar})
   }

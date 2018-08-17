@@ -20,7 +20,40 @@ const window = Dimensions.get('window');
 
 var dataPatient = [];
 
-
+const dataPatient3 = [{
+           "amount": {
+             "appointments": 0,
+             "diagnosis": 1,
+             "medicines": 1,
+             "testResults": 0,
+           },
+           "appointments": [],
+           "date": new Date(2018, 7, 15),
+           "diagnosis": [
+           {
+               "diagnosis": "WOWIE",
+             },
+           ],
+           "docName": "Doctor Hopper",
+           "medicines":  [
+              {
+               "Days":  [
+                 "Everyday",
+               ],
+               "Times":  {
+                 "Time1": new Date(2018, 7, 15),
+                 "Time2": null,
+                 "Time3": null,
+                 "Time4": null,
+               },
+               "endDate": new Date(2018, 7, 15),
+               "medName": "Valium",
+               "startDate": new Date(2018, 7, 15),
+             },
+           ],
+           "patientName": "Patient Pipper",
+           "testResults":  [],
+         }]
 
 var counter = 0;
 export default class AllPrescriptionsScreen extends React.Component {
@@ -34,6 +67,51 @@ export default class AllPrescriptionsScreen extends React.Component {
   }
 
   renderRow(dataPatient) {
+
+    // dataPatient["date"] = dataPatient["date"].toString();
+    // dataPatient['date'] = dataPatient['date'].split(" ")[0]+ " " + dataPatient['date'].split(" ")[1]+" " +dataPatient['date'].split(" ")[2]+" " +dataPatient['date'].split(" ")[3];
+    if(dataPatient.hasOwnProperty('appointments') === false) {
+      dataPatient['appointments'] = [];
+    }
+    if(dataPatient.hasOwnProperty('medicines') === false) {
+      dataPatient['medicines'] = [];
+    }
+    if(dataPatient.hasOwnProperty('diagnosis') === false) {
+      dataPatient['diagnosis'] = [];
+    }
+    if(dataPatient.hasOwnProperty('testResults') === false) {
+      dataPatient['testResults'] = [];
+    }
+    // for(var i = 0; i < dataPatient.appointments.length; i++) {
+    //   dataPatient["appointments"][i]["appointmentDate"] = dataPatient["appointments"][i]["appointmentDate"].toString();
+    //   dataPatient["appointments"][i]["appointmentDate"] = dataPatient["appointments"][i]["appointmentDate"].split(" ")[0]+
+    //    " " + dataPatient["appointments"][i]["appointmentDate"].split(" ")[1]+
+    //    " " +dataPatient["appointments"][i]["appointmentDate"].split(" ")[2]+
+    //    " " +dataPatient["appointments"][i]["appointmentDate"].split(" ")[3];
+    // }
+
+    for(var i = 0; i < dataPatient.amount.medicines; i++) {
+      var timeList = dataPatient["medicines"][i]["Times"];
+      for(var n = 1; n < Object.keys(dataPatient["medicines"][i]["Times"]).length+1; n++) {
+        time = "Time" + n;
+        if (timeList[time] !== null) {
+          // timeList[time] = timeList[time].toString();
+          timeList[time]= timeList[time].split(" ")[0];
+
+        }
+      }
+
+      // dataPatient["medicines"][i]['startDate'] = dataPatient["medicines"][i]['startDate'].toString()
+      // dataPatient["medicines"][i]['endDate'] = dataPatient["medicines"][i]['endDate'].toString()
+      // console.log(dataPatient["medicines"]);
+      //
+      // console.log(dataPatient["medicines"][i]['endDate']);
+      // dataPatient["medicines"][i]['endDate']= dataPatient["medicines"][i]['endDate'].split(" ")[0]+ " " + dataPatient["medicines"][i]['endDate'].split(" ")[1]+" " +dataPatient["medicines"][i]['endDate'].split(" ")[2]+
+      // " " +dataPatient["medicines"][i]['endDate'].split(" ")[3];
+      // dataPatient["medicines"][i]['startDate']= dataPatient["medicines"][i]['startDate'].split(" ")[0]+ " " + dataPatient["medicines"][i]['startDate'].split(" ")[1]+" " +dataPatient["medicines"][i]['startDate'].split(" ")[2]+
+      // " " +dataPatient["medicines"][i]['startDate'].split(" ")[3];
+    }
+
     counter = counter +1;
     var newVar = {
       medicines: [],
@@ -43,28 +121,29 @@ export default class AllPrescriptionsScreen extends React.Component {
     }
     var i;
 
-    for (i=0; i < dataPatient.amounts.medicines; i++) {
-      var med = "Medicine"+i;
-      newVar.medicines.push(dataPatient[med])
-    }
+    // for (i=0; i < dataPatient.amount.medicines; i++) {
+    //   var med = "Medicine"+i;
+    //   newVar.medicines.push(dataPatient[med])
+    // }
     var i;
-
-    for (i=0; i < dataPatient.amounts.appointments; i++) {
-      var app = "Appointment"+i;
-      newVar.appointments[app] = (dataPatient[app])
-    }
-    var i;
-
-    for (i=0; i < dataPatient.amounts.diagnosis; i++) {
-      var dia = "Diagnosis"+i;
-      newVar.diagnosis[dia] = (dataPatient[dia])
-    }
-    var i;
-
-    for (i=0; i < dataPatient.amounts.testResults; i++) {
-      var tr = "testres"+i;
-      newVar.testres[tr] = (dataPatient[tr])
-    }
+    // console.log(dataPatient.amount.appointments);
+    // for (i=0; i < dataPatient.amount.appointments; i++) {
+    //   console.log(dataPatient.appointments[i]);
+    //   var app = "Appointment"+i;
+    //   newVar.appointments[app] = (dataPatient.appointments[i])
+    // }
+    // var i;
+    //
+    // for (i=0; i < dataPatient.amount.diagnosis; i++) {
+    //   var dia = "Diagnosis"+i;
+    //   newVar.diagnosis[dia] = (dataPatient.diagnosis[i])
+    // }
+    // var i;
+    //
+    // for (i=0; i < dataPatient.amount.testResults; i++) {
+    //   var tr = "testres"+i;
+    //   newVar.testres[tr] = (dataPatient.testResults[i])
+    // }
 
     if (counter % 2 == 0 )
       {return (
@@ -79,7 +158,7 @@ export default class AllPrescriptionsScreen extends React.Component {
           </View>
           <View style={{justifyContent: 'center'}}>
             <Button block style={{backgroundColor: "#c1514d"}}
-              onPress={() => this._seePrescription(dataPatient.docName, dataPatient.patientName, dataPatient.date, newVar.medicines, newVar.appointments, newVar.diagnosis, newVar.testres)}>
+              onPress={() => this._seePrescription(dataPatient.docName, dataPatient.patientName, dataPatient.date, dataPatient.medicines, dataPatient.appointments, dataPatient.diagnosis, dataPatient.testResults)}>
               <Text>Press</Text>
             </Button>
           </View>
@@ -99,7 +178,7 @@ export default class AllPrescriptionsScreen extends React.Component {
         </View>
         <View style={{justifyContent: 'center'}}>
           <Button block style={{backgroundColor: "#c1514d"}}
-            onPress={() => this._seePrescription(dataPatient.docName, dataPatient.patientName, dataPatient.date, newVar.medicines, newVar.appointments, newVar.diagnosis, newVar.testres)}>
+            onPress={() => this._seePrescription(dataPatient.docName, dataPatient.patientName, dataPatient.date, dataPatient.medicines, dataPatient.appointments, dataPatient.diagnosis, dataPatient.testResults)}>
             <Text>Press</Text>
           </Button>
         </View>
@@ -110,21 +189,23 @@ export default class AllPrescriptionsScreen extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     var userId = firebase.auth().currentUser.uid;
     var that = this;
     console.log(userId);
     firebase.database().ref("users/" + userId+ "/data/Prescriptions/").on('value', function(snapshot) {
+      that.setState({loaded: true});
       snapshot.forEach(function(childSnapshot) {
 
         var childData = childSnapshot.val();
         // dataPatient.push(childData);
-        that.setState({loaded: true});
+
         that.setState(prevState => {
           return {
             dataPatient2: prevState.dataPatient2.concat(childData)
           };
         });
+
       });
     });
   }
@@ -142,6 +223,8 @@ export default class AllPrescriptionsScreen extends React.Component {
              </Button>
              </View>
 
+
+
              <ListView
                data={this.state.dataPatient2}
                renderRow={this.renderRow.bind(this)}
@@ -155,7 +238,21 @@ export default class AllPrescriptionsScreen extends React.Component {
    }
 
   _addNew = () => {
-    newVar = {   }
+    var medicinesList = [];
+    var AppointmentList = [];
+    var DiagnosisList = [];
+    var TestResultList = [];
+    var PictureList = [];
+    var data= {};
+    newVar = {
+      medicinesList,
+      AppointmentList,
+      DiagnosisList,
+      TestResultList,
+      PictureList,
+      data
+    }
+    this.setState({dataPatient2: []})
     this.props.navigation.navigate('AddNew', {newVar});
   };
 
@@ -169,14 +266,7 @@ export default class AllPrescriptionsScreen extends React.Component {
       diagnosis: diagnosis,
       testres: testres
     }
-
-
     this.props.navigation.navigate('SinglePrescription', {newVar});
-  };
-
-  _signOutAsync = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
   };
 
 }

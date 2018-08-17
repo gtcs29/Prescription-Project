@@ -19,78 +19,25 @@ import GenerateForm from 'react-native-form-builder';
 const tempFields = [
   {
     type: 'text',
-    name: 'medName',
+    name: 'test',
     required: true,
-    icon: 'ios-person',
-    label: 'Medicine Name',
+    icon: 'ios-medical',
+    label: 'Test',
   },
   {
-    type: 'date',
-    name: 'startDate',
-    mode: 'date',
+    type: 'text',
+    name: 'result',
     required: true,
-    label: 'Start Date',
-    maxDate: new Date(2300, 7, 15),
-    minDate: new Date(1880, 7, 15),
-  },
-  {
-    type: 'date',
-    name: 'endDate',
-    mode: 'date',
-    required: true,
-    label: 'End Date',
-    maxDate: new Date(2300, 7, 15),
-    minDate: new Date(1880, 7, 15),
-  },
-  {
-    type: 'select',
-    name: 'Days',
-    required: true,
-    multiple: true,
-    label: 'Days',
-    options: ['Everyday', 'Alternate Days'],
-  },
-  {
-    type: 'group',
-    name: 'Times',
-    required: true,
-    label: 'Choose Times',
-    fields: [
-      {
-        type: 'date',
-        name: 'Time1',
-        mode: 'time',
-        label: 'Time',
-      },
-      {
-        type: 'date',
-        name: 'Time2',
-        mode: 'time',
-        label: 'Time',
-      },
-      {
-        type: 'date',
-        name: 'Time3',
-        mode: 'time',
-        label: 'Time',
-      },
-      {
-        type: 'date',
-        name: 'Time4',
-        mode: 'time',
-        label: 'Time',
-      }
-
-    ]
-  },
-
+    icon: 'ios-medical',
+    label: 'Result',
+  }
 ]
 
 var form;
 
-export default class MedicineFormScreen extends React.Component {
+export default class testResultFormScreen extends React.Component {
   static navigationOptions = {
-    title: 'Prescriptions!',
+    title: 'Test Results!',
   };
   componentWillMount() {
     if(this.props.navigation.state.params.newVar.hasOwnProperty('data')){
@@ -102,31 +49,28 @@ export default class MedicineFormScreen extends React.Component {
   constructor(props) {
     super(props);
     var i = 0;
-    this.state = {fields: tempFields, selected1: 'ADD', doc: "", patientName: "", date: null}
+    this.state = {fields: tempFields, selected1: 'ADD', doc: "", patientName: "", date: null, picText: 'Take a Picture'}
   }
 
   confirm = () => {
 
     const formValues = this.formGenerator.getValues();
-
     var data = this.props.navigation.state.params.newVar.data
     var name = this.props.navigation.state.params.newVar.name
-    var medicinesList = this.props.navigation.state.params.newVar.medicinesList
+    var TestResultList = this.props.navigation.state.params.newVar.TestResultList
     data[name] = formValues
-    if(!(medicinesList.indexOf(name) >= 0)){
-      console.log('a')
-      medicinesList.push(name);
+    if(!(TestResultList.indexOf(name) >= 0)){
+      TestResultList.push(name);
     }
     var newVar =
     {
       data,
-      medicinesList
+      TestResultList
     }
     this.props.navigation.navigate('AddNew', {newVar})
   }
 
   render() {
-
     return (
 
       <Container style={styles.container} contentContainerStyle={styles.contentContainer}>

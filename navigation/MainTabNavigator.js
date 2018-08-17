@@ -10,9 +10,12 @@ import PrescriptionsScreen from '../screens/PrescriptionsScreen';
 import SinglePrescriptionScreen from '../screens/SinglePrescriptionScreen';
 import PrescriptionSortScreen from '../screens/PrescriptionSortScreen';
 import AddNewScreen from '../screens/AddNewScreen';
-import betweenAddScreen from '../screens/betweenAddScreen';
 import PasswordResetProfileScreen from '../screens/PasswordResetProfileScreen';
 import MedicineFormScreen from '../screens/MedicineFormScreen';
+import AppointmentFormScreen from '../screens/AppointmentFormScreen';
+import DiagnosisFormScreen from '../screens/DiagnosisFormScreen';
+import TestResultFormScreen from '../screens/TestResultFormScreen';
+import TestResultCamera from '../screens/TestResultCamera.js';
 
 
 
@@ -71,8 +74,11 @@ const PrescriptionsStack = createStackNavigator({
   Prescriptions: PrescriptionsScreen,
   SinglePrescription: SinglePrescriptionScreen,
   AddNew: AddNewScreen,
-  betweenAdd: betweenAddScreen,
-  MedicineForm: MedicineFormScreen
+  MedicineForm: MedicineFormScreen,
+  AppointmentForm: AppointmentFormScreen,
+  TestResultForm: TestResultFormScreen,
+  DiagnosisForm: DiagnosisFormScreen,
+  TestResultCamera: TestResultCamera
 });
 
 PrescriptionsStack.navigationOptions = {
