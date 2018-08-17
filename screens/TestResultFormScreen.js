@@ -65,7 +65,7 @@ export default class testResultFormScreen extends React.Component {
     var newVar =
     {
       data,
-      name
+      TestResultList
     }
     this.props.navigation.navigate('AddNew', {newVar})
   }

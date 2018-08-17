@@ -48,7 +48,7 @@ const tempFields = [
     required: true,
     multiple: true,
     label: 'Days',
-    options: ['Everyday', 'Alternate Days', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    options: ['Everyday', 'Alternate Days'],
   },
   {
     type: 'group',
@@ -106,7 +106,9 @@ export default class MedicineFormScreen extends React.Component {
   }
 
   confirm = () => {
+
     const formValues = this.formGenerator.getValues();
+
     var data = this.props.navigation.state.params.newVar.data
     var name = this.props.navigation.state.params.newVar.name
     var medicinesList = this.props.navigation.state.params.newVar.medicinesList
