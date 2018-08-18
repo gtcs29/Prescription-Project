@@ -1,9 +1,9 @@
 {
-  "packagerPort": 19003,
-  "packagerPid": 61229,
-  "expoServerNgrokUrl": "https://3s-grf.gitika.prescription-project.exp.direct",
-  "packagerNgrokUrl": "https://packager.3s-grf.gitika.prescription-project.exp.direct",
-  "ngrokPid": 61243,
-  "expoServerPort": 19000,
-  "devToolsPort": 19002
+  "devToolsPort": 19002,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }

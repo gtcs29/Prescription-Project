@@ -211,7 +211,7 @@ export default class AllPrescriptionsScreen extends React.Component {
   }
 
   render() {
-     if (!this.state.loaded) return <ActivityIndicator size="large" color="#9abdb5" style={{paddingBottom: 20}} />;
+     // if (!this.state.loaded) return <ActivityIndicator size="large" color="#9abdb5" style={{paddingBottom: 20}} />;
      return (
 
          <Container style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -222,10 +222,7 @@ export default class AllPrescriptionsScreen extends React.Component {
                <Text>Add New</Text>
              </Button>
              </View>
-
-
-
-             <ListView
+            <ListView
                data={this.state.dataPatient2}
                renderRow={this.renderRow.bind(this)}
              />
