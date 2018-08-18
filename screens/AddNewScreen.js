@@ -129,7 +129,7 @@ export default class AddNewScreen extends React.Component {
     )
   }
 
-  confirm() {
+  confirm = async() => {
     this.hideMenu();
     const formValues = this.formGenerator.getValues();
     var medicineNumber = 0;
@@ -142,7 +142,7 @@ export default class AddNewScreen extends React.Component {
     var diagnosis = [];
     var testResults = [];
     var pictures = [];
-    
+
     data["date"] = formValues["date"];
     data["docName"] = formValues["date"];
     data["patientName"] = formValues["date"];
@@ -190,7 +190,7 @@ export default class AddNewScreen extends React.Component {
       diagnosis: diagnosis,
       testResults: testResults
     }
-    
+
     for(var i = 0; i < newVar.amount.medicines; i++) {
       if(newVar.medicines[i].endDate !== null) {
         newVar.medicines[i].endDate = newVar.medicines[i].endDate.toDateString();
@@ -203,7 +203,8 @@ export default class AddNewScreen extends React.Component {
 
         if(newVar.medicines[i].Times[tim] !== null) {
           newVar.medicines[i].Times[tim] = newVar.medicines[i].Times[tim].toTimeString();
-          this.handlePress(newVar.medicines[i].medName, newVar.medicines[i].startDate, newVar.medicines[i].Times[tim], newVar.medicines[i].Days[0]);
+          var id = await this.handlePress(newVar.medicines[i].medName, newVar.medicines[i].startDate, newVar.medicines[i].Times[tim], newVar.medicines[i].Days[0]);
+          console.log("WHEE" + id)
           // var notifNumber = "notifId" + i + n;
           // newVar.medicines[i][notifNumber] = idR;
           // console.log("whee" + idR);
@@ -211,6 +212,7 @@ export default class AddNewScreen extends React.Component {
           // console.log(idR);
         }
       }
+      console.log(reminderIds)
       newVar.medicines[i]['reminders'] = reminderIds;
     }
 
@@ -372,7 +374,7 @@ export default class AddNewScreen extends React.Component {
     }
     this.props.navigation.navigate('TestResultCamera', {newVar});
   }
-  
+
   renderDelete() {
     return(
       <Ionicons.Button name="ios-trash" backgroundColor='#ffffff' size={30} color='red' onPress={this.deleteAll} />
@@ -461,7 +463,7 @@ export default class AddNewScreen extends React.Component {
       }
     }
 
-    Expo.Notifications.scheduleLocalNotificationAsync (
+    return Expo.Notifications.scheduleLocalNotificationAsync (
         localNotification,
         schedulingOptions
       )
@@ -469,13 +471,14 @@ export default class AddNewScreen extends React.Component {
       reminderIds.push(id);
       this.setState({idR: id});
       console.log(id);
+      return(id)
     })
     .catch((error) =>{
-      return(error)
       console.log(error);
+      return(error)
     })
   }
-  
+
   handleDelete = () => {
       Expo.Notifications.cancelScheduledNotificationAsync(this.state.idR);
   }

@@ -131,8 +131,52 @@ export default class TabRemindersScreen extends React.Component {
     Expo.Notifications.cancelAllScheduledNotificationsAsync();
   }
 
-  handleDelete = (id) => {
+  handleDelete = (dataPatient, id) => {
     Expo.Notifications.cancelScheduledNotificationAsync(id);
+    // console.log("WHEE")
+    // console.log(dataPatient)
+    // console.log("WHEE")
+    var userId = firebase.auth().currentUser.uid;
+    var that = this;
+    console.log(userId);
+    firebase.database().ref("users/" + userId+ "/data/Prescriptions/").on('value', function(snapshot) {
+      that.setState({loaded: true});
+      snapshot.forEach(function(childSnapshot) {
+
+        var childData = childSnapshot.val();
+        console.log("WHEE")
+        console.log(childData)
+        console.log("WHEE")        // dataPatient.push(childData);
+
+        // that.setState(prevState => {
+        //   return {
+        //     dataPatient2: prevState.dataPatient2.concat(childData)
+        //   };
+        // });
+
+      });
+    });
+    // return firebase.database().ref('items').child('ITEM_KEY').remove();
+
+      // for (var i = 0; i < dataPatient["medicines"].length; i++) {
+      //   for (var n=0; n < dataPatient["medicines"][i]["reminders"].length; n++) {
+      //     if (dataPatient["medicines"][i]["reminders"][n] === id) {
+      //       dataPatient["medicines"][i]["reminders"].splice(n, 1)
+      //     }
+      //   }
+      // }
+
+    // Object.keys(dataPatient).forEach(function(key) {
+    //
+    //   for (var i = 0; i < dataPatient[key]["medicines"].length; i++) {
+    //     for (var n=0; n < dataPatient[key]["medicines"][i]["reminders"].length; n++) {
+    //       if (dataPatient[key]["medicines"][i]["reminders"][n] === id) {
+    //         dataPatient[key]["medicines"][i]["reminders"].splice(n, 1)
+    //       }
+    //     }
+    //   }
+    //
+    // });
 
   }
 
@@ -165,8 +209,6 @@ export default class TabRemindersScreen extends React.Component {
     counter = counter +1;
 
     for (var i = 0; i < dataPatient.amount.medicines; i++) {
-      console.log('reminderscheck')
-      console.log(dataPatient.medicines[i]);
         if(dataPatient.medicines[i].hasOwnProperty('reminders') === false) {
           dataPatient.medicines[i]['reminders'] = [];
         }
@@ -187,7 +229,7 @@ export default class TabRemindersScreen extends React.Component {
                 </View>
                 <View style={{justifyContent: 'center'}}>
                   <Button block style={{backgroundColor: "#c1514d"}}
-                    onPress={() => this.handleDelete(dataPatient.medicines[i]['reminders'][n])}>
+                    onPress={() => this.handleDelete(dataPatient, dataPatient.medicines[i]['reminders'][n]).bind(this)}>
                     <Text>Delete</Text>
                   </Button>
                 </View>
@@ -208,7 +250,7 @@ export default class TabRemindersScreen extends React.Component {
               </View>
               <View style={{justifyContent: 'center'}}>
                 <Button block style={{backgroundColor: "#c1514d"}}
-                  onPress={() => this.handleDelete(dataPatient.medicines[i]['reminders'][n])}>
+                  onPress={() => this.handleDelete(dataPatient, dataPatient.medicines[i]['reminders'][n])}>
                   <Text>Delete</Text>
                 </Button>
               </View>
