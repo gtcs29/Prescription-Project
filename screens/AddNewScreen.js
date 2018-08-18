@@ -114,7 +114,7 @@ export default class AddNewScreen extends React.Component {
     removeFromList(name)
   }
 
-  confirm() {
+  confirm = async () => {
     const formValues = this.formGenerator.getValues();
     var medicineNumber = 0;
     var appointmentsNumber = 0;
@@ -170,7 +170,6 @@ export default class AddNewScreen extends React.Component {
       testResults: testResults
     }
 
-    // console.log(newVar)
 
 
     for(var i = 0; i < newVar.amount.medicines; i++) {
@@ -185,7 +184,7 @@ export default class AddNewScreen extends React.Component {
 
         if(newVar.medicines[i].Times[tim] !== null) {
           newVar.medicines[i].Times[tim] = newVar.medicines[i].Times[tim].toTimeString();
-          this.handlePress(newVar.medicines[i].medName, newVar.medicines[i].startDate, newVar.medicines[i].Times[tim], newVar.medicines[i].Days[0]);
+          await this.handlePress(newVar.medicines[i].medName, newVar.medicines[i].startDate, newVar.medicines[i].Times[tim], newVar.medicines[i].Days[0]);
           // var notifNumber = "notifId" + i + n;
           // newVar.medicines[i][notifNumber] = idR;
           // console.log("whee" + idR);
@@ -193,6 +192,7 @@ export default class AddNewScreen extends React.Component {
           // console.log(idR);
         }
       }
+      console.log(reminderIds)
       newVar.medicines[i]['reminders'] = reminderIds;
     }
 
@@ -205,11 +205,15 @@ export default class AddNewScreen extends React.Component {
     }
     }
 
+    console.log("HI")
+    console.log(newVar)
+    console.log("HELLO")
+
+
     // console.log(newVar)
     var userId = firebase.auth().currentUser.uid;
     var that = this;
 
-    console.log(newVar)
     firebase.database().ref("users/" + userId+ "/data/Prescriptions/").push(newVar)
     medicinesList = [];
     AppointmentList = [];
@@ -384,7 +388,6 @@ export default class AddNewScreen extends React.Component {
 
   render() {
     data = this.props.navigation.state.params.newVar.data;
-    console.log(data)
     if(this.props.navigation.state.params.newVar.hasOwnProperty('medicinesList')){
       medicinesList = this.props.navigation.state.params.newVar.medicinesList
     }
