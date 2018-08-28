@@ -142,19 +142,55 @@ export default class AddNewScreen extends React.Component {
     var diagnosis = [];
     var testResults = [];
     var pictures = [];
+    var reminders = []
 
     data["date"] = formValues["date"];
-    data["docName"] = formValues["date"];
-    data["patientName"] = formValues["date"];
+    data["docName"] = formValues["docName"];
+    data["patientName"] = formValues["docName"];
     for(var key in data) {
       if(data.hasOwnProperty(key)){
         var key_string = JSON.stringify(key)
-        if(key_string.includes('Medicine')){
+
+        if(key_string.includes('Medicine')) {
           medicines.push(data[key]);
+
+          var dataMed = JSON.parse(JSON.stringify(data[key]));
+
+          console.log(data[key]);
+          console.log(data[key]['Times']);
+
+          for(var i = 1; i < 5;i++) {
+            let timeName = 'Time' + i
+            console.log(data[key]['Times'][timeName]);
+
+            if (data[key]['Times'][timeName] !== null) {
+              dataMed['time'] = data[key]['Times'][timeName].toTimeString();
+              dataMed['endDate']= data[key]['endDate'].toDateString();
+              dataMed['startDate']= data[key]['startDate'].toDateString();
+              dataMed['type'] = 'Medicines';
+              var dataAdd = JSON.parse(JSON.stringify(dataMed));
+              reminders.push(dataAdd)
+            }
+          }
+
+          delete dataMed['Times'];
+
           medicineNumber++;
         }
         else if (key_string.includes('Appointment')) {
           appointments.push(data[key]);
+
+          var dataMed = JSON.parse(JSON.stringify(data[key]));
+
+          console.log(data[key]);
+
+          dataMed['time'] = data[key]['appointmentTime'].toTimeString();
+          dataMed['endDate']= data[key]['appointmentDate'].toDateString();
+          dataMed['startDate']= data[key]['appointmentDate'].toDateString();
+          dataMed['type'] = 'Appointments';
+          dataMed['medName'] = dataMed['clinicName'];
+          reminders.push(dataMed)
+
           appointmentsNumber++;
         }
         else if (key_string.includes('Diagnosis')) {
@@ -188,32 +224,42 @@ export default class AddNewScreen extends React.Component {
       medicines: medicines,
       appointments: appointments,
       diagnosis: diagnosis,
-      testResults: testResults
+      testResults: testResults,
+      reminders: reminders
     }
 
     for(var i = 0; i < newVar.amount.medicines; i++) {
       if(newVar.medicines[i].endDate !== null) {
         newVar.medicines[i].endDate = newVar.medicines[i].endDate.toDateString();
+
       }
       if(newVar.medicines[i].startDate !== null) {
         newVar.medicines[i].startDate = newVar.medicines[i].startDate.toDateString();
+
       }
       for (var n=1; n < 5; n++) {
         var tim = "Time"+n;
 
         if(newVar.medicines[i].Times[tim] !== null) {
           newVar.medicines[i].Times[tim] = newVar.medicines[i].Times[tim].toTimeString();
-          var id = await this.handlePress(newVar.medicines[i].medName, newVar.medicines[i].startDate, newVar.medicines[i].Times[tim], newVar.medicines[i].Days[0]);
-          console.log("WHEE" + id)
-          // var notifNumber = "notifId" + i + n;
-          // newVar.medicines[i][notifNumber] = idR;
-          // console.log("whee" + idR);
-          // console.log(newVar.medicines[i][notifNumber]);
-          // console.log(idR);
+
+          // var id = await this.handlePress(newVar.medicines[i].medName, newVar.medicines[i].startDate, newVar.medicines[i].Times[tim], newVar.medicines[i].Days[0]);
+          // console.log("WHEE" + id)
         }
       }
-      console.log(reminderIds)
-      newVar.medicines[i]['reminders'] = reminderIds;
+      // console.log(reminderIds)
+      // newVar.medicines[i]['reminders'] = reminderIds;
+    }
+
+    console.log(newVar.reminders)
+    for(var i = 0; i < newVar.reminders.length; i++) {
+      console.log(newVar.reminders[i])
+
+
+
+      var id = await this.handlePress(newVar.reminders[i].medName, newVar.reminders[i].startDate, newVar.reminders[i]['time']);
+      console.log("WHEE" + id)
+      newVar.reminders[i]['reminderId'] = id;
     }
 
     for(var i = 0; i < newVar.amount.appointments; i++) {
@@ -431,7 +477,7 @@ export default class AddNewScreen extends React.Component {
     );
   }
 
-  handlePress = (medName, date, time, repeat) => {
+  handlePress = (medName, date, time) => {
     var localNotification =  {
       title: medName,
       body: medName,
@@ -450,19 +496,22 @@ export default class AddNewScreen extends React.Component {
     var dateTime = date + " " + time;
     let t = Date.parse(dateTime);
 
-    if (repeat = 'Everyday')
-    {
-      var schedulingOptions = {
-          time: t, // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
-          repeat: 'day'
-      }
-    }
-    else {
-      var schedulingOptions = {
-          time: t, // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
-      }
-    }
+    // if (repeat = 'Everyday')
+    // {
+    //   var schedulingOptions = {
+    //       time: t, // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
+    //       repeat: 'day'
+    //   }
+    // }
+    // else {
+    //   var schedulingOptions = {
+    //       time: t, // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
+    //   }
+    // }
 
+      var schedulingOptions = {
+          time: t, // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
+      }
     return Expo.Notifications.scheduleLocalNotificationAsync (
         localNotification,
         schedulingOptions

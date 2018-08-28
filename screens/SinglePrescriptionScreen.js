@@ -35,16 +35,40 @@ export default class SinglePrescriptionScreen extends React.Component {
       medicines: this.props.navigation.state.params.newVar.medicines,
       appointments: this.props.navigation.state.params.newVar.appointments,
       diagnosis: this.props.navigation.state.params.newVar.diagnosis,
-      tests: this.props.navigation.state.params.newVar.testres
+      tests: this.props.navigation.state.params.newVar.testres,
+      amounts: this.props.navigation.state.params.newVar.amount
+    }
+  }
+
+    componentWillMount() {
+
+
+          console.log(this.state.amounts)
+
+            for(var i = 0; i < this.state.amounts.medicines; i++) {
+              var newVar = {
+                title: this.props.navigation.state.params.newVar.medicines[i].medicine,
+                content: this.props.navigation.state.params.newVar.medicines[i].medicineDosage
+              }
+              this.state.dataArray.push(newVar);
+            }
+
+          if(this.state.medicines == null) {
+            this.setState({medicines: []})
+          }
+          if(this.state.appointments == null) {
+            this.setState({appointments: []})
+          }
+          if(this.state.diagnosis == null) {
+            this.setState({diagnosis: []})
+          }
+          if(this.state.tests == null) {
+            this.setState({tests: []})
+          }
+
     }
 
-      for(var i = 0; i < this.props.navigation.state.params.newVar.medicines.length; i++) {
-        var newVar = {
-          title: this.props.navigation.state.params.newVar.medicines[i].medicine,
-          content: this.props.navigation.state.params.newVar.medicines[i].medicineDosage
-        }
-        this.state.dataArray.push(newVar);
-      }
+
       // for(var i = 0; i < Object.keys(this.props.navigation.state.params.newVar.appointments).length; i++) {
       //   var val = "Appointment" + i;
       //
@@ -64,7 +88,7 @@ export default class SinglePrescriptionScreen extends React.Component {
 
 
 
-  }
+
 
   renderRowOld = (medicineList) => {
     return(
@@ -120,7 +144,6 @@ _renderContentMeds(section) {
   for(var i = 1; i < Object.keys(section.Times).length+1; i++) {
     if( i !== Object.keys(section.Times).length){
       var tim = "Time" + i;
-      console.log(section.Times[tim])
       stringTimes = stringTimes + section.Times[tim] + ",";
     }
     else {
@@ -128,7 +151,6 @@ _renderContentMeds(section) {
       stringTimes = stringTimes + section.Times[tim];
     }
   }
-  console.log('WHEE' + stringTimes)
 
   return (
 
@@ -204,6 +226,8 @@ _renderContentTests(section) {
 
 
   render() {
+
+
     return (
 
 
