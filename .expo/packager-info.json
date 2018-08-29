@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19003,
-  "packagerPid": 25971,
-  "expoServerNgrokUrl": "https://xf-bix.gitika.prescription-project.exp.direct",
-  "packagerNgrokUrl": "https://packager.xf-bix.gitika.prescription-project.exp.direct",
-  "ngrokPid": 25993
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }

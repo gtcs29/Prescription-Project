@@ -203,9 +203,7 @@ export default class TabRemindersScreen extends React.Component {
     var dataByCategory = {}
 
     for(var i =0; i < dataAll.length; i++) {
-      console.log(i);
       var category = dataAll[i].type
-      console.log(dataAll[i]);
 
       if(dataByCategory.hasOwnProperty(category)) {
         dataByCategory[category].push(dataAll[i])

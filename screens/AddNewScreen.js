@@ -156,12 +156,9 @@ export default class AddNewScreen extends React.Component {
 
           var dataMed = JSON.parse(JSON.stringify(data[key]));
 
-          console.log(data[key]);
-          console.log(data[key]['Times']);
 
           for(var i = 1; i < 5;i++) {
             let timeName = 'Time' + i
-            console.log(data[key]['Times'][timeName]);
 
             if (data[key]['Times'][timeName] !== null) {
               dataMed['time'] = data[key]['Times'][timeName].toTimeString();
@@ -181,8 +178,6 @@ export default class AddNewScreen extends React.Component {
           appointments.push(data[key]);
 
           var dataMed = JSON.parse(JSON.stringify(data[key]));
-
-          console.log(data[key]);
 
           dataMed['time'] = data[key]['appointmentTime'].toTimeString();
           dataMed['endDate']= data[key]['appointmentDate'].toDateString();
