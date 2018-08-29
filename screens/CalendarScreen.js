@@ -53,9 +53,6 @@ export default class CalendarScreen extends React.Component {
 
     return (
       <Container>
-          <ImageBackground style={{width: window.width, height: 100}} source={require('../assets/images/goldBackground.png')} >
-            <Text> Calendar </Text>
-          </ImageBackground>
         <Content>
           <Calendar
             onDayPress={this.onDayPress}
@@ -91,7 +88,7 @@ const styles = StyleSheet.create({
 
   calendar: {
   borderTopWidth: 1,
-  paddingTop: 5,
+  paddingTop: 30,
   borderBottomWidth: 1,
   borderColor: '#eee',
   height: 350
