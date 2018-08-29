@@ -142,8 +142,7 @@ export default class AddNewScreen extends React.Component {
     var diagnosis = [];
     var testResults = [];
     var pictures = [];
-    var reminders = []
-
+    var reminders = [];
     data["date"] = formValues["date"];
     data["docName"] = formValues["docName"];
     data["patientName"] = formValues["docName"];
@@ -205,6 +204,10 @@ export default class AddNewScreen extends React.Component {
     var patientName = formValues['patientName']
     var docName = formValues['docName']
     var date = formValues['date']
+    var dateStringInsert = null
+    if(date !== null) {
+       dateStringInsert = date.toDateString();
+    }
     var amounts = {
         "medicines": medicineNumber,
         "appointments": appointmentsNumber,
@@ -214,7 +217,7 @@ export default class AddNewScreen extends React.Component {
     var newVar = {
       patientName: patientName,
       docName: docName,
-      date: date.toDateString(),
+      date: dateStringInsert,
       amount: amounts,
       medicines: medicines,
       appointments: appointments,
@@ -237,7 +240,6 @@ export default class AddNewScreen extends React.Component {
 
         if(newVar.medicines[i].Times[tim] !== null) {
           newVar.medicines[i].Times[tim] = newVar.medicines[i].Times[tim].toTimeString();
-
           // var id = await this.handlePress(newVar.medicines[i].medName, newVar.medicines[i].startDate, newVar.medicines[i].Times[tim], newVar.medicines[i].Days[0]);
           // console.log("WHEE" + id)
         }
@@ -265,7 +267,7 @@ export default class AddNewScreen extends React.Component {
         newVar.appointments[i].appointmentTime = newVar.appointments[i].appointmentTime.toTimeString();
       }
     }
-    console.log(newVar)
+    console.log(newVar["docName"].length)
     var userId = firebase.auth().currentUser.uid;
     var that = this;
     var key;
@@ -471,7 +473,6 @@ export default class AddNewScreen extends React.Component {
       </View>
     );
   }
-
   handlePress = (medName, date, time) => {
     var localNotification =  {
       title: medName,

@@ -11,6 +11,7 @@ Changes:
 * Remove keyboard on completing last entry on the forms.
 * Add a Verify email option on login screen.
 * Add a please change your password screen post first login after resetting password.
+* If we dont enter the necessary info, it wont submit
 
 
 
