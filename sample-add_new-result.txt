@@ -1,0 +1,48 @@
+Object {
+ "amount": Object {
+   "appointments": 1,
+   "diagnosis": 1,
+   "medicines": 1,
+   "testResults": 1,
+ },
+ "appointments": Array [
+   Object {
+     "appointmentDate": "Thu Aug 23 2018",
+     "appointmentTime": "15:50:57 GMT-0400 (EDT)",
+     "clinicAddress": "Gitika3",
+     "clinicName": "Gitika2",
+     "docName": "Gitika",
+   },
+ ],
+ "date": "Thu Aug 23 2018",
+ "diagnosis": Array [
+   Object {
+     "diagnosis": "Diagnosed",
+   },
+ ],
+ "docName": "Gitika doc",
+ "medicines": Array [
+   Object {
+     "Days": Array [
+       "Everyday",
+     ],
+     "Times": Object {
+       "Time1": "15:50:27 GMT-0400 (EDT)",
+       "Time2": "15:52:31 GMT-0400 (EDT)",
+       "Time3": null,
+       "Time4": null,
+     },
+     "endDate": "Thu Aug 23 2018",
+     "medName": "Medicine 1",
+     "reminders": Array [],
+     "startDate": "Thu Aug 23 2018",
+   },
+ ],
+ "patientName": "Gitika",
+ "testResults": Array [
+   Object {
+     "result": "Testy",
+     "test": "Test",
+   },
+ ],
+}
