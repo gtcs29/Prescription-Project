@@ -16,6 +16,9 @@ import AppointmentFormScreen from '../screens/AppointmentFormScreen';
 import DiagnosisFormScreen from '../screens/DiagnosisFormScreen';
 import TestResultFormScreen from '../screens/TestResultFormScreen';
 import TestResultCamera from '../screens/TestResultCamera.js';
+import ProfileScreen from '../screens/ProfileScreen';
+import MedicalHistoryScreen from '../screens/MedicalHistoryScreen';
+import LoginDetailsScreen from '../screens/LoginDetailsScreen';
 
 
 
@@ -56,7 +59,10 @@ RemindersStack.navigationOptions = {
 
 const SettingsStack = createStackNavigator({
   Settings: SettingsScreen,
-  PasswordResetProfile: PasswordResetProfileScreen
+  PasswordResetProfile: PasswordResetProfileScreen,
+  Profile: ProfileScreen,
+  MedicalHistory: MedicalHistoryScreen,
+  LoginDetails: LoginDetailsScreen
 
 });
 

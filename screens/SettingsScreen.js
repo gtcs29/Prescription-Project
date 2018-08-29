@@ -37,20 +37,6 @@ export default class SettingsScreen extends React.Component {
 
   }
 
-  _update = () => {
-    this.props.navigation.navigate('ProfileLoginForm');
-  }
-
-  _update2 = () => {
-    this.props.navigation.navigate('ProfilePersonalForm');
-
-  }
-
-  _update3 = () => {
-    this.props.navigation.navigate('ProfileMedicalForm');
-
-  }
-
   render() {
 
      return (
@@ -74,7 +60,7 @@ export default class SettingsScreen extends React.Component {
               <ListItem itemDivider>
                 <Text />
               </ListItem>
-              <ListItem icon>
+              <ListItem icon button onPress={() => this.props.navigation.navigate('Profile')}>
                 <Left>
                   <Button style={{ backgroundColor: "#4b8477" }}>
                     <Icon active name="ios-body" />
@@ -88,7 +74,7 @@ export default class SettingsScreen extends React.Component {
                 </Right>
               </ListItem>
 
-              <ListItem icon>
+              <ListItem icon button onPress={() => this.props.navigation.navigate('LoginDetails')}>
                 <Left>
                   <Button style={{ backgroundColor: "#9abdb5" }}>
                     <Icon active name="ios-key" />
@@ -102,7 +88,7 @@ export default class SettingsScreen extends React.Component {
                 </Right>
               </ListItem>
 
-              <ListItem icon>
+              <ListItem icon button onPress={() => this.props.navigation.navigate('MedicalHistory')}>
                 <Left>
                   <Button style={{ backgroundColor: "#4b8477" }}>
                     <Icon active name="heart" />
@@ -175,52 +161,6 @@ export default class SettingsScreen extends React.Component {
      )
   }
 }
-/*
-<ImageBackground style={{width: window.width, height: window.height}} source={require('../assets/images/tealBackground.png')} >
-  <View style={{flexDirection: 'row', marginBottom: 10, marginTop: 20, marginHorizontal:20, alignItems: 'center', justifyContent: "space-between"}}>
-    <Text style={{fontWeight: 'bold'}}> Login Details </Text>
-    <Button bordered light small onPress={this._update}> <Text> Update</Text> </Button>
-  </View>
-  <View style={{backgroundColor: '#ffffff', marginHorizontal: 20, marginTop: 10, marginBottom: 2}}>
-    <Text style={styles.mainText}> Name: {this.state.patientName} </Text>
-  </View>
-  <View style={{backgroundColor: '#ffffff', marginHorizontal: 20, marginVertical: 2}}>
-    <Text style={styles.mainText}> Username: {this.state.username} </Text>
-  </View>
-  <View style={{backgroundColor: '#ffffff', marginHorizontal: 20, marginVertical: 2}}>
-    <Text style={styles.mainText}> Email: {this.state.email} </Text>
-  </View>
-
-  <View style={{flexDirection: 'row', marginBottom: 10, marginTop: 20, marginHorizontal:20, alignItems: 'center', justifyContent: "space-between"}}>
-    <Text style={{fontWeight: 'bold'}}> Personal Details </Text>
-    <Button bordered light small onPress={this._update2}> <Text> Update</Text> </Button>
-  </View>
-  <View style={{backgroundColor: '#ffffff', marginHorizontal: 20, marginTop: 10, marginBottom: 2}}>
-    <Text style={styles.mainText}> Age: {this.state.age} </Text>
-  </View>
-  <View style={{backgroundColor: '#ffffff', marginHorizontal: 20, marginVertical: 2}}>
-    <Text style={styles.mainText}> Birthday: {this.state.birthday} </Text>
-  </View>
-  <View style={{backgroundColor: '#ffffff', marginHorizontal: 20, marginVertical: 2}}>
-    <Text style={styles.mainText}> Gender: {this.state.gender} </Text>
-  </View>
-
-  <View style={{flexDirection: 'row', marginBottom: 10, marginTop: 20, marginHorizontal:20, alignItems: 'center', justifyContent: "space-between"}}>
-    <Text style={{fontWeight: 'bold'}}> Medical Details </Text>
-    <Button bordered light small onPress={this._update3}> <Text> Update</Text> </Button>
-  </View>
-  <View style={{backgroundColor: '#ffffff', marginHorizontal: 20, marginTop: 10, marginBottom: 2}}>
-    <Text style={styles.mainText}> Height: {this.state.height} </Text>
-  </View>
-  <View style={{backgroundColor: '#ffffff', marginHorizontal: 20, marginVertical: 2}}>
-    <Text style={styles.mainText}> Weight: {this.state.weight} </Text>
-  </View>
-  <View style={{backgroundColor: '#ffffff', marginHorizontal: 20, marginVertical: 2}}>
-    <Text style={styles.mainText}> Medications: {this.state.currentMedications} </Text>
-  </View>
-  </ImageBackground>
-
-*/
 const styles = StyleSheet.create({
   container: {
     height: 60,
