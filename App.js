@@ -1,7 +1,10 @@
 import React from 'react';
 import firebase from 'firebase';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon } from 'expo';
+import { AppLoading} from 'expo';
+import { Asset } from "expo-asset";
+import * as Icon from "@expo/vector-icons";
+import * as Font from 'expo-font';
 import AppNavigator from './navigation/AppNavigator';
 import { createStackNavigator } from 'react-navigation';
 import PrescriptionsScreen from './screens/PrescriptionsScreen';

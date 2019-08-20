@@ -1,9 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 89819,
+  "expoServerNgrokUrl": "https://vn-ji7.tejitpabari.prescription-project.exp.direct",
+  "packagerNgrokUrl": "https://packager.vn-ji7.tejitpabari.prescription-project.exp.direct",
+  "ngrokPid": 89827,
+  "webpackServerPort": null
 }
