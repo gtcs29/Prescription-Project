@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 
 import { Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title} from 'native-base';
 
@@ -25,7 +25,7 @@ const AuthStack = createStackNavigator({ SignIn: SignInScreen, SignUp: SignUpScr
 
 const PasswordResetStack = createStackNavigator({PasswordReset: PasswordResetScreen})
 
-export default createSwitchNavigator(
+export default createAppContainer(createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
     PasswordReset: PasswordResetStack,
@@ -36,4 +36,4 @@ export default createSwitchNavigator(
   {
     initialRouteName: 'AuthLoading',
   }
-);
+));
