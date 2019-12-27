@@ -3,6 +3,7 @@ import axios from 'axios';
 const ROOT_URL = 'https://us-central1-prescriptions-gtcs29.cloudfunctions.net';
 import {AuthButton, AuthButtonTrans, AuthItem, AuthContainerLogo, AuthForm, ErrorToast, Loading} from '../../components';
 import firebase from 'firebase';
+import {Keyboard} from "react-native";
 require("firebase/firestore");
 
 
@@ -27,7 +28,9 @@ export default class PasswordResetScreen extends React.Component {
   }
 
   _verify = async () => {
-    console.log(this.state.error)
+    Keyboard.dismiss();
+    console.log(this.state.error);
+    const db = firebase.firestore();
     var user = firebase.auth().currentUser;
     var userId = user.uid;
 
@@ -47,31 +50,49 @@ export default class PasswordResetScreen extends React.Component {
       return this.setState({ error: 'Password can only contain @ or _ as a special character.', password: '', verifyPassword: ''})
     }
     var that = this;
+    const credentials = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
 
-
-    user.reauthenticateAndRetrieveDataWithCredential(firebase.auth.EmailAuthProvider.credential(user.email, oldPassword))
+    user.reauthenticateWithCredential(credentials)
       .then(() => {
         user.updatePassword(password)
           .then(function() {
-            console.log()
-            firebase.database().ref("users/" + userId+ "/auth/reset_password")
-              .update({ passwordReset: false });
-            axios.post(`${ROOT_URL}/resetPasswordEmail`, {
-              uid: userId
+            console.log('Password updated');
+
+            var reset_password = db.collection('users').doc(userId).collection('auth').doc('reset_password');
+            reset_password.set({passwordReset: false})
+            .then(() => {
+              axios.post(`${ROOT_URL}/resetPasswordEmail`, {
+                uid: userId
+              })
+                .then(() => {
+                  that.props.navigation.navigate('Main')
+                })
+                .catch((err) => {
+                  console.log(err.code, err);
+                  ErrorToast();
+                  that.setState({error: err.toString(), password: '', verifyPassword: '' });
+                  that.forceUpdate();
+                })
             })
-              .then(() => {
-                that.props.navigation.navigate('Main')
-              })
-              .catch(err => {
-                return that.setState({error: error.toString(), password: '', verifyPassword: '' })
-              })
+            .catch((err) => {
+              console.log(err.code, err);
+              ErrorToast();
+              that.setState({error: err.toString(), password: '', verifyPassword: '' });
+              that.forceUpdate();
+            })
           })
-          .catch(function(error) {
-            return that.setState({error: error.toString(), password: '', verifyPassword: '' })
+          .catch((err) => {
+            console.log(err.code, err);
+            ErrorToast();
+            that.setState({error: err.toString(), password: '', verifyPassword: '' });
+            that.forceUpdate();
           });
       })
-      .catch(function(error) {
-        that.setState({ error: error.toString(), oldPassword: '', password: '', verifyPassword: '' })
+      .catch((err) => {
+        console.log(err.code, err);
+        ErrorToast();
+        that.setState({ error: err.toString(), oldPassword: '', password: '', verifyPassword: '' });
+        that.forceUpdate();
       });
   }
 

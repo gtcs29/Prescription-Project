@@ -93,10 +93,9 @@ export default class SignUpScreen extends React.Component {
         var uid = user.uid;
         console.log(user.uid);
         db.collection('users').doc(uid).collection('auth').doc('reset_password').set({
-            passwordReset2: false
+            passwordReset: false
           })
           .then(() => {
-            console.log('HERE');
             axios.post(`${ROOT_URL}/verifyEmail`, {email: email})
               .then(() => {
                 this.props.navigation.navigate('emailVerification', {email});
