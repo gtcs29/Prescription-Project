@@ -18,7 +18,7 @@ module.exports = function(req, res) {
               codeValid: false
             })
               .then(() => {
-                return res.status(200).send({success: 'Succ'});
+                return res.status(200).send({success: 'Success'});
               })
               .catch((err) => {return res.status(422).send({ error: '3',err }) });
           }
