@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { ListView } from '@shoutem/ui';
-import { MonoText } from '../components/StyledText';
+
 import { Tabs, Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem} from 'native-base';
 import firebase from 'firebase';
 

@@ -20,10 +20,6 @@ import ProfileScreen from '../screens/ProfileScreen';
 import MedicalHistoryScreen from '../screens/MedicalHistoryScreen';
 import LoginDetailsScreen from '../screens/LoginDetailsScreen';
 
-
-
-
-
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
 });

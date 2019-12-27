@@ -10,30 +10,28 @@ import {
   Alert
 } from 'react-native';
 import { ListView } from '@shoutem/ui';
-import { MonoText } from '../components/StyledText';
+
 import { List, ListItem, Icon, Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, Picker, Separator} from 'native-base';
 import firebase from 'firebase';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Enotype from "react-native-vector-icons/Entypo";
-
 import Menu, { MenuItem } from 'react-native-material-menu';
-
 import { WebBrowser, Notifications, Permissions} from 'expo';
-
 import GenerateForm from 'react-native-form-builder';
+require("firebase/firestore");
 
-const eventObject = Expo.Notifications.addListener(()=>
-  Alert.alert(
-    'Alert Title',
-    'My Alert Msg',
-    [
-      {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-      {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-    ],
-    { cancelable: false }
-  )
-)
+// const eventObject = Expo.Notifications.addListener(()=>
+//   Alert.alert(
+//     'Alert Title',
+//     'My Alert Msg',
+//     [
+//       {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+//       {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+//       {text: 'OK', onPress: () => console.log('OK Pressed')},
+//     ],
+//     { cancelable: false }
+//   )
+// );
 
 const tempFields = [
   {
@@ -59,7 +57,7 @@ const tempFields = [
     maxDate: new Date(2300, 7, 15),
     minDate: new Date(1880, 7, 15),
   },
-]
+];
 
 var medicinesList = [];
 var AppointmentList = [];
@@ -109,13 +107,13 @@ export default class AddNewScreen extends React.Component {
     else if(!PictureList[name] === undefined ){
       delete PictureList[name]
     }
-  }
+  };
 
   remove = (name) => {
     this.hideMenu();
     delete data[name]
     removeFromList(name)
-  }
+  };
 
   deleteAll = () => {
     Alert.alert(
@@ -127,7 +125,7 @@ export default class AddNewScreen extends React.Component {
       ],
       { cancelable: false }
     )
-  }
+  };
 
   confirm = async() => {
     this.hideMenu();
@@ -201,10 +199,10 @@ export default class AddNewScreen extends React.Component {
         }
       }
     }
-    var patientName = formValues['patientName']
-    var docName = formValues['docName']
-    var date = formValues['date']
-    var dateStringInsert = null
+    var patientName = formValues['patientName'];
+    var docName = formValues['docName'];
+    var date = formValues['date'];
+    var dateStringInsert = null;
     if(date !== null) {
        dateStringInsert = date.toDateString();
     }
@@ -213,7 +211,7 @@ export default class AddNewScreen extends React.Component {
         "appointments": appointmentsNumber,
         "diagnosis": diagnosisNumber,
         "testResults": testResultsNumber
-    }
+    };
     var newVar = {
       patientName: patientName,
       docName: docName,
@@ -224,7 +222,7 @@ export default class AddNewScreen extends React.Component {
       diagnosis: diagnosis,
       testResults: testResults,
       reminders: reminders
-    }
+    };
 
     for(var i = 0; i < newVar.amount.medicines; i++) {
       if(newVar.medicines[i].endDate !== null) {
@@ -248,14 +246,14 @@ export default class AddNewScreen extends React.Component {
       // newVar.medicines[i]['reminders'] = reminderIds;
     }
 
-    console.log(newVar.reminders)
+    // console.log(newVar.reminders);
     for(var i = 0; i < newVar.reminders.length; i++) {
-      console.log(newVar.reminders[i])
+      // console.log(newVar.reminders[i]);
 
 
 
       var id = await this.handlePress(newVar.reminders[i].medName, newVar.reminders[i].startDate, newVar.reminders[i]['time']);
-      console.log("WHEE" + id)
+      // console.log("WHEE" + id)
       newVar.reminders[i]['reminderId'] = id;
     }
 
@@ -267,10 +265,17 @@ export default class AddNewScreen extends React.Component {
         newVar.appointments[i].appointmentTime = newVar.appointments[i].appointmentTime.toTimeString();
       }
     }
-    console.log(newVar["docName"].length)
+    // console.log(newVar["docName"].length)
+    var db = firebase.firestore();
+    console.log(newVar)
     var userId = firebase.auth().currentUser.uid;
     var that = this;
     var key;
+
+
+
+
+
     firebase.database().ref("users/" + userId+ "/data/Prescriptions/").push(newVar)
       .then(res => {key=res.getKey()})
       .catch(err => console.log(err))
@@ -522,7 +527,7 @@ export default class AddNewScreen extends React.Component {
       console.log(error);
       return(error)
     })
-  }
+  };
 
   handleDelete = () => {
       Expo.Notifications.cancelScheduledNotificationAsync(this.state.idR);

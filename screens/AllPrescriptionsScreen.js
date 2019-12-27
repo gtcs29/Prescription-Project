@@ -13,9 +13,9 @@ import {
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { ListView } from '@shoutem/ui';
-import { MonoText } from '../components/StyledText';
 import { Icon, Left, Right, Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, List, ListItem} from 'native-base';
 import firebase from 'firebase';
+require("firebase/firestore");
 const window = Dimensions.get('window');
 import reverse from 'reverse-object-order';
 
@@ -42,8 +42,7 @@ export default class AllPrescriptionsScreen extends React.Component {
     var that = this;
     console.log(userId);
 
-
-
+    // var prescriptions = db.collection("");
 
     firebase.database().ref("users/" + userId+ "/data/Prescriptions/").on('value', function(snapshot) {
       that.setState({loaded: true});
@@ -123,7 +122,7 @@ export default class AllPrescriptionsScreen extends React.Component {
 
     dataAll = dataAll.reverse();
 
-    console.log(dataAll)
+    // console.log(dataAll)
 
     var dataByYear = {}
 
