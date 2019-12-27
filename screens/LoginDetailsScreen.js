@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { ListView } from '@shoutem/ui';
-import { MonoText } from '../components/StyledText';
+
 import { Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Title, Card, CardItem, List, ListItem, Icon, Left, Body, Right, Switch} from 'native-base';
 
 const window = Dimensions.get('window');
@@ -35,21 +35,21 @@ export default class LoginDetailsScreen extends React.Component {
     weight: "weight",
     currentMedications: "currentMedications"
 
-  }
+  };
 
   _update = () => {
     this.props.navigation.navigate('ProfileLoginForm');
-  }
+  };
 
   _update2 = () => {
     this.props.navigation.navigate('ProfilePersonalForm');
 
-  }
+  };
 
   _update3 = () => {
     this.props.navigation.navigate('ProfileMedicalForm');
 
-  }
+  };
 
   render() {
 

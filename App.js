@@ -6,9 +6,6 @@ import { Asset } from "expo-asset";
 import * as Icon from "@expo/vector-icons";
 import * as Font from 'expo-font';
 import AppNavigator from './navigation/AppNavigator';
-import { createStackNavigator } from 'react-navigation';
-import PrescriptionsScreen from './screens/PrescriptionsScreen';
-import SinglePrescriptionScreen from './screens/SinglePrescriptionScreen';
 import { Root } from 'native-base';
 var config = {
   apiKey: "AIzaSyBRU1khtjv7uP_-ClbqZhU0jQ8p3kMpQxU",
@@ -19,6 +16,7 @@ var config = {
   messagingSenderId: "595069032401"
 };
 firebase.initializeApp(config);
+console.disableYellowBox = true;
 
 export default class App extends React.Component {
 

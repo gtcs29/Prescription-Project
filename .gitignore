@@ -3,3 +3,6 @@ node_modules
 native-base-theme
 /native-base-theme/*
 .babelrc
+**/.DS_Store
+/idea/*
+.idea

@@ -13,7 +13,7 @@ import {
 import { WebBrowser } from 'expo';
 import { ListView } from '@shoutem/ui';
 
-import { MonoText } from '../components/StyledText';
+
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import { ListItem, Icon, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, List} from 'native-base';
 import Accordion from 'react-native-collapsible/Accordion';
