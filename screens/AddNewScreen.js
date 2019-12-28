@@ -12,12 +12,12 @@ import {
 import { ListView } from '@shoutem/ui';
 
 import { List, ListItem, Icon, Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, Picker, Separator} from 'native-base';
-import firebase from 'firebase';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Enotype from "react-native-vector-icons/Entypo";
 import Menu, { MenuItem } from 'react-native-material-menu';
 import { WebBrowser, Notifications, Permissions} from 'expo';
 import GenerateForm from 'react-native-form-builder';
+const firebase = require("firebase");
 require("firebase/firestore");
 
 // const eventObject = Expo.Notifications.addListener(()=>
@@ -77,7 +77,7 @@ export default class AddNewScreen extends React.Component {
   constructor(props) {
     super(props);
     this.confirm = this.confirm.bind(this);
-     this.state = {fields: tempFields, selected1: 'ADD', idR: "", eventS: {}, delete: false}
+     this.state = {fields: tempFields, selected1: 'ADD', idR: "", eventS: {}, delete: false, key: ""}
   }
 
   async componentWillMount() {
@@ -272,13 +272,85 @@ export default class AddNewScreen extends React.Component {
     var that = this;
     var key;
 
+    // var newVar = {
+    //   patientName: patientName,
+    //   docName: docName,
+    //   date: dateStringInsert,
+    //   amount: amounts,
+    //   medicines: medicines,
+    //   appointments: appointments,
+    //   diagnosis: diagnosis,
+    //   testResults: testResults,
+    //   reminders: reminders
+    // };
+
+    db.collection('users').doc(userId).collection('Entry').add({
+      patientName: newVar.patientName,
+      docName: newVar.docName,
+      date: newVar.date
+    })
+    .then((docRef) => {
+      // key=docRef.id;
+      id = docRef.id
+      this.setState({key: id});
+
+    })
+    .catch(function(err){
+      console.log(err);
+    })
+    console.log(this.state.key)
+    db.collection('users').doc(userId).collection('Medicines').doc(this.state.key).set({
+      medicines: newVar.medicines
+    }, { merge: true })
+    .then(function(res){
+      console.log(res);
+      console.log("OK")
+    })
+    .catch(function(err){
+      console.log(err);
+    })
+
+    db.collection('users').doc(userId).collection('Appointments').doc(this.state.key).set({
+      appointments: newVar.appointments
+    }, { merge: true })
+    .then(function(res){
+      console.log(res);
+    })
+    .catch(function(err){
+      console.log(err);
+    })
+
+    db.collection('users').doc(userId).collection('Diagnosis').doc(this.state.key).set({
+      diagnosis: newVar.diagnosis
+    }, { merge: true })
+    .then(function(res){
+      console.log(res);
+    })
+    .catch(function(err){
+      console.log(err);
+    })
+
+    db.collection('users').doc(userId).collection('testResults').doc(this.state.key).set({
+      testResults: newVar.testResults
+    }, { merge: true })
+    .then(function(res){
+      console.log(res);
+    })
+    .catch(function(err){
+      console.log(err);
+    })
+
+    db.collection('users').doc(userId).collection('reminders').doc(this.state.key).set({
+      reminders: newVar.reminders
+    }, { merge: true })
+    .then(function(res){
+      console.log(res);
+    })
+    .catch(function(err){
+      console.log(err);
+    })
 
 
-
-
-    firebase.database().ref("users/" + userId+ "/data/Prescriptions/").push(newVar)
-      .then(res => {key=res.getKey()})
-      .catch(err => console.log(err))
     var storageString = `users/${userId}/data/Prescriptions/${key}/`;
     var storageRef = firebase.storage().ref();
     var i = 0;
