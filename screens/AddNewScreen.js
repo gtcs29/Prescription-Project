@@ -15,23 +15,25 @@ import { List, ListItem, Icon, Tab, Accordion, Container, Button, Text, Content,
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Enotype from "react-native-vector-icons/Entypo";
 import Menu, { MenuItem } from 'react-native-material-menu';
-import { WebBrowser, Notifications, Permissions} from 'expo';
+import { WebBrowser, Notifications} from 'expo';
+import * as Permissions from 'expo-permissions';
 import GenerateForm from 'react-native-form-builder';
+import Constants from 'expo-constants';
 const firebase = require("firebase");
 require("firebase/firestore");
 
-// const eventObject = Expo.Notifications.addListener(()=>
-//   Alert.alert(
-//     'Alert Title',
-//     'My Alert Msg',
-//     [
-//       {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-//       {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-//       {text: 'OK', onPress: () => console.log('OK Pressed')},
-//     ],
-//     { cancelable: false }
-//   )
-// );
+const eventObject = Expo.Notifications.addListener(()=>
+  Alert.alert(
+    'Alert Title',
+    'My Alert Msg',
+    [
+      {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+      {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ],
+    { cancelable: false }
+  )
+);
 
 const tempFields = [
   {
@@ -80,15 +82,52 @@ export default class AddNewScreen extends React.Component {
      this.state = {fields: tempFields, selected1: 'ADD', idR: "", eventS: {}, delete: false, key: ""}
   }
 
+  // registerForPushNotificationsAsync = async () => {
+  //   if (Constants.isDevice) {
+  //     const { status: existingStatus } = await Permissions.getAsync(
+  //       Permissions.NOTIFICATIONS
+  //     );
+  //     let finalStatus = existingStatus;
+  //     if (existingStatus !== 'granted') {
+  //       const { status } = await Permissions.askAsync(
+  //         Permissions.NOTIFICATIONS
+  //       );
+  //       finalStatus = status;
+  //     }
+  //     if (finalStatus !== 'granted') {
+  //       alert('Failed to get push token for push notification!');
+  //       return;
+  //     }
+  //     let token = await Notifications.getExpoPushTokenAsync();
+  //     console.log(token);
+  //   } else {
+  //     alert('Must use physical device for Push Notifications');
+  //   }
+  // };
+
   async componentWillMount() {
-    const { Permissions } = Expo;
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    const { status, permissions } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
     if (status === 'granted') {
       console.log(status);
     } else {
       throw new Error('Notification permission not granted');
     }
-  }
+
+    // this.registerForPushNotificationsAsync();
+    //
+    // this.eventObject = Notifications.addListener(notification=>{
+    //   Alert.alert(
+    //     'Alert Title',
+    //     'My Alert Msg',
+    //     [
+    //       {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+    //       {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+    //       {text: 'OK', onPress: () => console.log('OK Pressed')},
+    //     ],
+    //     { cancelable: false }
+    //   )
+    // });
+  };
 
   removeFromList = (name) => {
     this.hideMenu();
@@ -226,11 +265,11 @@ export default class AddNewScreen extends React.Component {
 
     for(var i = 0; i < newVar.amount.medicines; i++) {
       if(newVar.medicines[i].endDate !== null) {
-        newVar.medicines[i].endDate = newVar.medicines[i].endDate.toDateString();
+        newVar.medicines[i].endDate = (newVar.medicines[i].endDate).toDateString();
 
       }
       if(newVar.medicines[i].startDate !== null) {
-        newVar.medicines[i].startDate = newVar.medicines[i].startDate.toDateString();
+        newVar.medicines[i].startDate = (newVar.medicines[i].startDate).toDateString();
 
       }
       for (var n=1; n < 5; n++) {
@@ -238,8 +277,6 @@ export default class AddNewScreen extends React.Component {
 
         if(newVar.medicines[i].Times[tim] !== null) {
           newVar.medicines[i].Times[tim] = newVar.medicines[i].Times[tim].toTimeString();
-          // var id = await this.handlePress(newVar.medicines[i].medName, newVar.medicines[i].startDate, newVar.medicines[i].Times[tim], newVar.medicines[i].Days[0]);
-          // console.log("WHEE" + id)
         }
       }
       // console.log(reminderIds)
@@ -265,6 +302,14 @@ export default class AddNewScreen extends React.Component {
         newVar.appointments[i].appointmentTime = newVar.appointments[i].appointmentTime.toTimeString();
       }
     }
+
+    var temp = {};
+    for(var i = 0; i < newVar.amount.medicines; i++) {
+      name = newVar.medicines[i].medName
+      temp.name = newVar.medicines[i]
+    }
+    newVar.medicines = temp
+
     // console.log(newVar["docName"].length)
     var db = firebase.firestore();
     console.log(newVar)
@@ -299,9 +344,9 @@ export default class AddNewScreen extends React.Component {
       console.log(err);
     })
     console.log(this.state.key)
-    db.collection('users').doc(userId).collection('Medicines').doc(this.state.key).set({
-      medicines: newVar.medicines
-    }, { merge: true })
+    db.collection('users').doc(userId).collection('Medicines').doc(this.state.key).set(
+      newVar.medicines
+    , { merge: true })
     .then(function(res){
       console.log(res);
       console.log("OK")
@@ -519,14 +564,14 @@ export default class AddNewScreen extends React.Component {
     this._menu.show();
   }
 
-  renderPictureMenu() {
-    return(
-      <View style={{ flex: 1, paddingLeft:15, paddingTop: 5, flexDirection: 'row' }}>
-        <Ionicons name='md-camera' size={15} />
-        <Text style={{ marginLeft: 5, fontSize: 15}}>Picture</Text>
-      </View>
-    )
-  }
+  // renderPictureMenu() {
+  //   return(
+  //     <View style={{ flex: 1, paddingLeft:15, paddingTop: 5, flexDirection: 'row' }}>
+  //       <Ionicons name='md-camera' size={15} />
+  //       <Text style={{ marginLeft: 5, fontSize: 15}}>Picture</Text>
+  //     </View>
+  //   )
+  // }
 
   renderIconMenu() {
     return(
@@ -545,11 +590,11 @@ export default class AddNewScreen extends React.Component {
           <MenuItem onPress={this.addAppointment}>Appointment</MenuItem>
           <MenuItem onPress={this.addDiagnosis}>Diagnosis</MenuItem>
           <MenuItem onPress={this.addTestResult}>Test Results</MenuItem>
-          <MenuItem onPress={this.addPicture}>{this.renderPictureMenu()}</MenuItem>
         </Menu>
       </View>
     );
   }
+
   handlePress = (medName, date, time) => {
     var localNotification =  {
       title: medName,
@@ -565,9 +610,11 @@ export default class AddNewScreen extends React.Component {
         vibrate: true
       },
     }
+    console.log(localNotification);
 
     var dateTime = date + " " + time;
-    let t = Date.parse(dateTime);
+    console.log(dateTime);
+    var t = new Date(dateTime);
 
     // if (repeat = 'Everyday')
     // {
@@ -582,9 +629,10 @@ export default class AddNewScreen extends React.Component {
     //   }
     // }
 
-      var schedulingOptions = {
-          time: t, // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
-      }
+    var schedulingOptions = {
+        time: t, // (date or number) — A Date object representing when to fire the notification or a number in Unix epoch time. Example: (new Date()).getTime() + 1000 is one second from now.
+    }
+    console.log(schedulingOptions);
     return Expo.Notifications.scheduleLocalNotificationAsync (
         localNotification,
         schedulingOptions
