@@ -13,6 +13,7 @@ import { ListView } from '@shoutem/ui';
 
 import { List, ListItem, Icon, Tab, Accordion, Container, Button, Text, Content, Form, Item, Label, Input, Header, Body, Title, Card, CardItem, Picker, Separator} from 'native-base';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Enotype from "react-native-vector-icons/Entypo";
 import Menu, { MenuItem } from 'react-native-material-menu';
 import { WebBrowser, Notifications} from 'expo';
@@ -21,19 +22,19 @@ import GenerateForm from 'react-native-form-builder';
 import Constants from 'expo-constants';
 const firebase = require("firebase");
 require("firebase/firestore");
-
-const eventObject = Expo.Notifications.addListener(()=>
-  Alert.alert(
-    'Alert Title',
-    'My Alert Msg',
-    [
-      {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-      {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-    ],
-    { cancelable: false }
-  )
-);
+//
+// const eventObject = Expo.Notifications.addListener(()=>
+//   Alert.alert(
+//     'Alert Title',
+//     'My Alert Msg',
+//     [
+//       {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+//       {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+//       {text: 'OK', onPress: () => console.log('OK Pressed')},
+//     ],
+//     { cancelable: false }
+//   )
+// );
 
 const tempFields = [
   {
@@ -282,7 +283,7 @@ export default class AddNewScreen extends React.Component {
       // console.log(reminderIds)
       // newVar.medicines[i]['reminders'] = reminderIds;
     }
-
+    console.log('here');
     // console.log(newVar.reminders);
     for(var i = 0; i < newVar.reminders.length; i++) {
       // console.log(newVar.reminders[i]);
@@ -305,7 +306,7 @@ export default class AddNewScreen extends React.Component {
 
     var temp = {};
     for(var i = 0; i < newVar.amount.medicines; i++) {
-      name = newVar.medicines[i].medName
+      var name = newVar.medicines[i].medName
       temp.name = newVar.medicines[i]
     }
     newVar.medicines = temp
@@ -316,7 +317,7 @@ export default class AddNewScreen extends React.Component {
     var userId = firebase.auth().currentUser.uid;
     var that = this;
     var key;
-
+    console.log('here2');
     // var newVar = {
     //   patientName: patientName,
     //   docName: docName,
@@ -354,7 +355,7 @@ export default class AddNewScreen extends React.Component {
     .catch(function(err){
       console.log(err);
     })
-
+    console.log('here3');
     db.collection('users').doc(userId).collection('Appointments').doc(this.state.key).set({
       appointments: newVar.appointments
     }, { merge: true })
@@ -395,7 +396,7 @@ export default class AddNewScreen extends React.Component {
       console.log(err);
     })
 
-
+    console.log('here4');
     var storageString = `users/${userId}/data/Prescriptions/${key}/`;
     var storageRef = firebase.storage().ref();
     var i = 0;
@@ -421,7 +422,7 @@ export default class AddNewScreen extends React.Component {
     TestResultList = [];
     PictureList = [];
     data= {};
-
+    console.log('here5');
     this.props.navigation.navigate('Prescriptions');
   }
 
@@ -547,7 +548,7 @@ export default class AddNewScreen extends React.Component {
   }
 
   renderPrescription() {
-    return <Text style={{ width: '80%', textAlign: 'center', fontSize: 25}}>Prescription</Text>
+    return <Text style={{ width: '80%', textAlign: 'center', fontSize: 25, marginTop: 7}}>Prescription</Text>
   }
 
   _menu = null;
@@ -575,7 +576,7 @@ export default class AddNewScreen extends React.Component {
 
   renderIconMenu() {
     return(
-      <Enotype name='plus' size={30} style={{ borderWidth: 1}}/>
+      <Enotype name='plus' size={30} style={{ borderWidth: 1, marginTop: 7}}/>
     );
   }
 
@@ -585,6 +586,7 @@ export default class AddNewScreen extends React.Component {
         <Menu
           ref={this.setMenuRef}
           button={<Text onPress={this.showMenu}>{this.renderIconMenu()}</Text>}
+          style={{marginTop:7}}
         >
           <MenuItem onPress={this.addMed}>Medicine</MenuItem>
           <MenuItem onPress={this.addAppointment}>Appointment</MenuItem>
@@ -654,6 +656,7 @@ export default class AddNewScreen extends React.Component {
   }
 
   render() {
+    console.log('1');
     if(this.state.delete === true) {
       medicinesList = [];
       AppointmentList = [];
@@ -695,91 +698,83 @@ export default class AddNewScreen extends React.Component {
 
       <Container style={styles.container} contentContainerStyle={styles.contentContainer}>
 
-        <Content>
-          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            {this.renderDelete()}
-            {this.renderPrescription()}
-            {this.renderDropdown()}
-          </View>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          {this.renderDelete()}
+          {this.renderPrescription()}
+          {this.renderDropdown()}
+        </View>
 
-          <View>
-            <GenerateForm
-              ref={(c) => {
-                this.formGenerator = c;
-              }}
-              fields={this.state.fields}
-            />
-          </View>
+        <View>
+          <GenerateForm
+            ref={(c) => { this.formGenerator = c; }}
+            fields={this.state.fields}
+          />
+        </View>
 
-          <ListItem itemDivider>
-              <Text>Medicines</Text>
+        <ListItem itemDivider>
+          <Text>Medicines</Text>
+        </ListItem>
+        <List dataArray={medicinesList}
+          renderRow={(medicine) =>
+            <ListItem button onPress={() => this.renderFormMedicine(medicine)}>
+              <Text>{medicine}</Text>
             </ListItem>
-          <List dataArray={medicinesList}
-            renderRow={(medicine) =>
-              <ListItem button onPress={() => this.renderFormMedicine(medicine)}>
-                <Text>{medicine}</Text>
-              </ListItem>
-            }>
-          </List>
+          }>
+        </List>
 
-          <ListItem itemDivider>
-              <Text>Appointments</Text>
+        <ListItem itemDivider>
+          <Text>Appointments</Text>
+        </ListItem>
+        <List dataArray={AppointmentList}
+          renderRow={(appointment) =>
+            <ListItem button onPress={() => this.renderFormAppointment(appointment)}>
+              <Text>{appointment}</Text>
             </ListItem>
-          <List dataArray={AppointmentList}
-            renderRow={(appointment) =>
-              <ListItem button onPress={() => this.renderFormAppointment(appointment)}>
-                <Text>{appointment}</Text>
-              </ListItem>
-            }>
-          </List>
+          }>
+        </List>
 
-          <ListItem itemDivider>
-              <Text>Diagnosis</Text>
+        <ListItem itemDivider>
+          <Text>Diagnosis</Text>
+        </ListItem>
+        <List dataArray={DiagnosisList}
+          renderRow={(diagnosis) =>
+            <ListItem button onPress={() => this.renderFormDiagnosis(diagnosis)}>
+              <Text>{diagnosis}</Text>
             </ListItem>
-          <List dataArray={DiagnosisList}
-            renderRow={(diagnosis) =>
-              <ListItem button onPress={() => this.renderFormDiagnosis(diagnosis)}>
-                <Text>{diagnosis}</Text>
-              </ListItem>
-            }>
-          </List>
+          }>
+        </List>
 
-          <ListItem itemDivider>
-              <Text>Test Results</Text>
+        <ListItem itemDivider>
+          <Text>Test Results</Text>
+        </ListItem>
+        <List dataArray={TestResultList}
+          renderRow={(testResults) =>
+            <ListItem button onPress={() => this.renderFormTestResult(testResults)}>
+              <Text>{testResults}</Text>
             </ListItem>
-          <List dataArray={TestResultList}
-            renderRow={(testResults) =>
-              <ListItem button onPress={() => this.renderFormTestResult(testResults)}>
-                <Text>{testResults}</Text>
-              </ListItem>
-            }>
-          </List>
+          }>
+        </List>
 
-          <ListItem itemDivider >
-              <Text>Picture</Text>
+        <ListItem itemDivider >
+          <Text>Picture</Text>
+        </ListItem>
+        <List dataArray={PictureList}
+          renderRow={(pic) =>
+            <ListItem button onPress={() => this.renderFormPictures(pic)}>
+              <Text>{pic}</Text>
             </ListItem>
-          <List dataArray={PictureList}
-            renderRow={(pic) =>
-              <ListItem button onPress={() => this.renderFormPictures(pic)}>
-                <Text>{pic}</Text>
-              </ListItem>
-            }>
-          </List>
+          }>
+        </List>
 
-          <View style={styles.submitButton}>
-            <Button block onPress={() => this.confirm()}>
-              <Text>Confirm</Text>
-            </Button>
-          </View>
-
-        </Content>
+        <View style={styles.submitButton}>
+          <Button block onPress={() => this.confirm()}>
+            <Text>Confirm</Text>
+          </Button>
+        </View>
 
       </Container>
-
     );
   }
-
-
 }
 
 const styles = StyleSheet.create({
